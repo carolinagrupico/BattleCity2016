@@ -38,7 +38,7 @@ public class Logica {
      }
      
      public void insertarEnemigo(){
-    	 Enemigos enemigo = tablero.getEnemigo();
+    	 Componente enemigo = tablero.getEnemigo();
     	 mapa.cargarEnemigos(enemigo);
     	 
      }
@@ -50,7 +50,7 @@ public class Logica {
     			 if(mapa.getEnemigo()[i]!=null)
     				 /*if(mapa.getEnemigo()[i].getAvanzar()) // falta verificar colicion. Si no coliciona avanzar=true
     					 mapa.getEnemigo()[i].mover(mapa.getEnemigo()[i].getUltimaDireccion());
-    				 else*/ mapa.getEnemigo()[i].mover(obtenerDireccion());
+    				 else*/ ((Tanque)mapa.getEnemigo()[i]).mover(obtenerDireccion());
     		 }    	 
      }
      

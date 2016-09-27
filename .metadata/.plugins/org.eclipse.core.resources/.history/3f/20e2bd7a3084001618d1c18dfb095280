@@ -1,0 +1,51 @@
+package Obstaculos;
+
+import java.awt.Point;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+public class TablaObstaculos {
+	private Obstaculo [] obs;
+	private Point posiciones;
+	
+	public TablaObstaculos(){
+		
+		obs = new Obstaculo[5];
+		
+		obs[0] = new Ladrillo();
+		obs[1] = new Acero();
+		obs[2] = new Agua();
+		obs[3] = new Cesped();
+		obs[4] = new Aguila();				
+		posiciones=new Point(1,1);
+	}
+	
+	public void recorrer(JPanel panelMapa){
+		for(int i=0 ; i<obs.length; i++)
+			obs[i].cargarObstaculo(panelMapa);
+		
+	}
+public void eliminarPared(JPanel panel1,int ancho, int alto){
+         
+ 		JLabel label= new JLabel();
+ 		int cantFila=0;
+ 		boolean hay=false;
+ 		while (cantFila < alto && !hay){
+ 		   for (int i=0; i < ancho && !hay; i++){
+ 			 posiciones.setLocation(cantFila, i);
+ 			  if (panel1.getLocation(posiciones) != null)
+ 			   if (panel1.getLocation(posiciones).getClass().getName().equals(obs[0].getNombre())){
+ 				   obs[0].getJLabel().
+ 			   }
+ 		   }
+ 				  
+ 		}
+       
+ 					  
+ 		
+ 		
+ 	}
+
+}

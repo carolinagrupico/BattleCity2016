@@ -16,12 +16,9 @@ public class Mapa {
 
 	private Tanque jugador;
 	private JPanel panelMapa;
-	private TablaObstaculos T_obs;
-	
-	private Enemigos[] enemigosEnBatalla;
-	private Tanque enemigoDePrueba;
-
+    protected Componente comp;
 	protected JPanel panel1;
+	 private Componente[] enemigosEnBatalla;
 	
 	protected int anchoPanel1;
 	protected int altoPanel1;
@@ -33,54 +30,44 @@ public class Mapa {
 		altoPanel1=panel.getHeight();
 		anchoPanel1=panel.getWidth();
 		jugador=new Jugador();
-		
-		
 		enemigosEnBatalla = new Enemigos[4];
+		comp = new Componente();
 		
 	}
 	
 	
 	public void iniciarCarga(){ // Este metodo solo se ejecuta al iniciar el juego.
-		
-		
-		jugador.insertarEnPanel(panelMapa);
-		cargarObstaculos();
-		
-	}
-	
-	
-	
-	private void cargarObstaculos(){
-		T_obs = new TablaObstaculos();
-		T_obs.recorrer(panelMapa);
-		
-	}
-	
+		jugador.insertar(panelMapa,jugador.getGrafico());
+		comp.cargarObstaculos(panelMapa);
 
-	public void cargarEnemigos(Enemigos e){
-		e.insertarEnPanel(panelMapa);
+	}
+	
+	public void cargarEnemigos(Componente enemigo){
+		enemigo.insertar(panelMapa, enemigo.getGrafico());
 		boolean inserte=false;
 		for(int i=0; i<enemigosEnBatalla.length && !inserte; i++){
 			if(enemigosEnBatalla[i]==null){
 				inserte=true;
-				enemigosEnBatalla[i]=e;
+				enemigosEnBatalla[i]=enemigo;
 			}
 		}
+		
 	}
 	
-	public void eliminarEnemigo(){
-		boolean elimine=false;
-		for(int i=0; i<enemigosEnBatalla.length && !elimine; i++){
-			if(enemigosEnBatalla[i]!=null){
-				enemigosEnBatalla[i].eliminarDelPanel(panelMapa);
-				enemigosEnBatalla[i]=null;
-				elimine=true;
+	 public void eliminarEnemigo(){
+			boolean elimine=false;
+			for(int i=0; i<enemigosEnBatalla.length && !elimine; i++){
+				if(enemigosEnBatalla[i]!=null){
+					enemigosEnBatalla[i].borrar(panelMapa,enemigosEnBatalla[i].getGrafico());
+					enemigosEnBatalla[i]=null;
+					elimine=true;
+				}
 			}
+				
 		}
-			
-	}
+
 	
-	public void mover(int dir,Tanque t){ 
+	 public void mover(int dir,Tanque t){ 
 		 int direccion=4; 
 		 if(dir==KeyEvent.VK_UP) 
 	 		direccion=0; 
@@ -101,7 +88,7 @@ public class Mapa {
 	}
 	
 	
-	public Enemigos[] getEnemigo(){
+	public Componente[] getEnemigo(){
 		return  enemigosEnBatalla;
 	}
 	
@@ -113,5 +100,6 @@ public class Mapa {
 		}
 		return cant;
 	}
+	
 	
 }

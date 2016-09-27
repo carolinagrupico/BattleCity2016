@@ -8,10 +8,21 @@
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="C:\Users\Carolina\Desktop\BattleCity2016\ElMejorBattleCity\src"/>
+			<item value="C:\Users\Carolina\Desktop\BattleCity2016\ElMejorBattleCity"/>
+			<item value="C:\Users\Carolina\Desktop\BattleCity2016"/>
 			<item value="C:\BattleCity2016"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
 			<item value=""/>
 		</list>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
+	</section>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item value="338" key="DIALOG_X_ORIGIN"/>
+		<item value="201" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

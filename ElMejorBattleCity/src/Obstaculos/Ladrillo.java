@@ -1,7 +1,11 @@
 package Obstaculos;
 
 
+import java.awt.Image;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -13,9 +17,12 @@ public class Ladrillo extends Obstaculo{
 	 }
 	 
 	 
-	 public void cargarObstaculo(JPanel panelMapa){
-			leerArchivo('l',panelMapa);
-		}
+	 
 	
-	
+	public String getNombre(){
+		return "ladrillo";
+	}
+	public Icon getIcon(){
+		return graf;
+	 }
 }

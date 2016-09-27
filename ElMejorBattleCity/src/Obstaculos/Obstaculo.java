@@ -13,9 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class Obstaculo {
+public abstract class Obstaculo extends Componente{
 
-  protected JLabel label;
   protected Icon graf;
   protected int ancho=25;
   protected int alto=25;
@@ -26,50 +25,24 @@ public abstract class Obstaculo {
 	  }
 	  
 	  
-	//lee del archivo, crea y carga un nuevo JLabel al panel del mapa
-	  public void leerArchivo(char c,JPanel panelMapa){
-		
-		 
-		   try{
-					FileReader f = new FileReader(getClass().getResource("/Archivo/primerNivel.txt").getFile());
-			        BufferedReader b = new BufferedReader(f);
-			        String cadena="";
-			        char d;
-			        int t=0;
-			        
-			        int y=1;
-			        
-			        while((cadena = b.readLine())!=null) {
-			        	int x=1;
-			        	for (int i = 0; i < cadena.length(); i++){
-			      		   d = cadena.charAt(i);
-			      		   x=x+25;
-			                if (c == d){ //insertar bien las posiciones 
-			           
-			                	label = new JLabel();
-			                	panelMapa.add(label); // ver esto
-			                	label.setBounds(x, y, ancho, alto);
-			                    ImageIcon aux=(ImageIcon) graf;
-			             	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
-			             	   label.setIcon(icono);
-			             	   
-			                }
-			            }
-			          y=y+25;
-			        }
-			        
-			 b.close();
-			 
-		 }catch (IOException e) {
-			 System.out.println("Error en obstaculo - leerArchivo. ");
-		 }	 
-		   
-	    }
-	    
+
+	  
+	  
+	 public void set(JPanel panelMapa,int x,int y){
+			label = new JLabel();
+	    	label.setBounds(x, y, ancho, alto);
+	        ImageIcon aux=(ImageIcon) graf;
+	 	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+	 	    label.setIcon(icono);
+	 	    insertar(panelMapa,label);
+			
+		}
+	 
+   public abstract String getNombre();
+   
+   public abstract Icon getIcon();
 
 
-
-	public abstract void cargarObstaculo(JPanel panelMapa);
 		
  }
 

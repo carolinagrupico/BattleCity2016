@@ -83,6 +83,8 @@ public class GUI extends JFrame {
 			}
 		});
 		
+		
+		
 		addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (e.VK_B==e.getKeyCode()){

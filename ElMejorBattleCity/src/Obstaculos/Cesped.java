@@ -1,6 +1,7 @@
 package Obstaculos;
 
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -13,9 +14,11 @@ public class Cesped extends Obstaculo{
 	 }
 	 
 	 
-	 public void cargarObstaculo(JPanel panelMapa){
-			leerArchivo('a',panelMapa);
+	
+	 public String getNombre(){
+			return "cesped";
 		}
-	
-	
+	 public Icon getIcon(){
+			return graf;
+		 }
 }

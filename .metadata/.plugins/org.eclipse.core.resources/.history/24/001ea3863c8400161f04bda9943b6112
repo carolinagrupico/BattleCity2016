@@ -1,0 +1,40 @@
+
+package Tanques;
+import java.awt.Image;
+import java.awt.Point;
+
+import javax.swing.*;
+
+import Logica.Mapa;
+
+
+
+public class Jugador extends Tanque{
+   
+	public Jugador(){
+	  	super();
+	  	posicion = new Point(120,400);
+	  	
+	  	velocidad=7;
+	  	imagen[0] = new ImageIcon(getClass().getResource("/Iconos/jugadorArriba.png"));
+	    imagen[1] = new ImageIcon(getClass().getResource("/Iconos/jugadorAbajo.png"));
+	    imagen[2] = new ImageIcon(getClass().getResource("/Iconos/jugadorIzquierdo.png"));
+	    imagen[3] = new ImageIcon(getClass().getResource("/Iconos/jugadorDerecho.png"));
+        
+	    graficoTanque= new JLabel();
+        graficoTanque.setBounds(posicion.x, posicion.y, ancho, altura);
+        ImageIcon aux=(ImageIcon) imagen[0]; //es un icono
+ 	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(graficoTanque.getWidth(), graficoTanque.getHeight(), Image.SCALE_DEFAULT));
+ 	    graficoTanque.setIcon(icono);
+	}
+	
+	public void setVelocidad(int v){
+		velocidad=v;
+	}
+	
+
+	@Override
+	public int getVelocidad() {		
+		return velocidad;
+	}
+}

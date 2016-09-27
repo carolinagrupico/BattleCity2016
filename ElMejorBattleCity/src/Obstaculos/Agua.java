@@ -1,6 +1,7 @@
 package Obstaculos;
 
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -13,9 +14,11 @@ public class Agua extends Obstaculo{
 	 }
 	 
 	 
-	 public void cargarObstaculo(JPanel panelMapa){
-			leerArchivo('b',panelMapa);
+	 
+	 public String getNombre(){
+			return "agua";
 		}
-	
-	
+	 public Icon getIcon(){
+			return graf;
+		 }
 }

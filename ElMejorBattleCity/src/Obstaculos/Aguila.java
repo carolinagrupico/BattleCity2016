@@ -1,5 +1,6 @@
 package Obstaculos;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -12,9 +13,13 @@ public class Aguila extends Obstaculo{
 	 }
 	 
 	 
-	 public void cargarObstaculo(JPanel panelMapa){
-			leerArchivo('A',panelMapa);
+	 
+	 public String getNombre(){
+			return "aguila";
 		}
+	 public Icon getIcon(){
+			return graf;
+		 }
 	}
 	
 	
