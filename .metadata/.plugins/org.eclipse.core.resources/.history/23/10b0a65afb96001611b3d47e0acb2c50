@@ -1,0 +1,11 @@
+package PowerUP;
+
+import javax.swing.ImageIcon;
+
+public class Reloj extends Power{
+	
+   public Reloj(){
+	 super();
+	 imagen[5] = new ImageIcon(getClass().getResource("/Iconos/reloj.jpg"));
+   }
+}

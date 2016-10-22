@@ -1,11 +1,11 @@
 package Obstaculos;
 
-import java.awt.Image;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+
+import Visitor.Visitor;
+
 
 
 
@@ -24,5 +24,16 @@ public class Acero extends Obstaculo{
 	 public Icon getIcon(){
 			return graf;
 		 }
+
+
+
+	@Override
+	public boolean dejoPasar(Visitor v) {
+		return v.puedePasar(this);
+	}
+	
+	public boolean meDestruye(Visitor v){
+		return false;
+	}
 	
 }

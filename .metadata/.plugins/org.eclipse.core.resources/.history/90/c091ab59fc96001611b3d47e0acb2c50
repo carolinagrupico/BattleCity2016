@@ -1,0 +1,22 @@
+package PowerUP;
+
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import Logica.Componente;
+
+public abstract class Power extends Componente{
+	
+	protected Icon graf;
+	
+	public Power(){
+		
+	}
+	
+	
+}

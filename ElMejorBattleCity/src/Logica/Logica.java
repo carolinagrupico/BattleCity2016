@@ -1,14 +1,18 @@
 package Logica;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-import GUI.GUI;
-import Tanques.Enemigos;
-import Tanques.Tanque;
+import Lista.Position;
+import State.*;
+import Tanques.*;
+
 
 public class Logica {
      private Mapa mapa;
@@ -16,6 +20,7 @@ public class Logica {
   
      protected int anchoPanel1;
      protected int altoPanel1;
+    
      
      public Logica(JPanel panel1,JPanel panel2){
     	 
@@ -24,8 +29,6 @@ public class Logica {
     	 mapa.iniciarCarga();
     	 tablero.insertarTab();
     	 insertarEnemigo();
-    	 insertarEnemigo();
-    	
     	 
      } 
      
@@ -33,36 +36,103 @@ public class Logica {
     	 return mapa;
      }
      
-     public Tablero getTablero(){
-    	 return tablero;
-     }
+    
      
      public void insertarEnemigo(){
-    	 Componente enemigo = tablero.getEnemigo();
-    	 mapa.cargarEnemigos(enemigo);
+    	 Enemigo enemigo = tablero.getEnemigo();
+    	 mapa.cargarEnemigo(enemigo);
     	 
      }
      
-     //este metodo deberia llamarse desde la GUI cada cierto tiempo 0.1 segundo ma o meno .
-     public void moverEnemigos(){
-    	
-    		 for(int i=0; i<4;i++){
-    			 if(mapa.getEnemigo()[i]!=null)
-    				 /*if(mapa.getEnemigo()[i].getAvanzar()) // falta verificar colicion. Si no coliciona avanzar=true
-    					 mapa.getEnemigo()[i].mover(mapa.getEnemigo()[i].getUltimaDireccion());
-    				 else*/ ((Tanque)mapa.getEnemigo()[i]).mover(obtenerDireccion());
-    		 }    	 
+     public void insertarBalaEnMapa(Tanque t){
+    	 int dir =t.getUltimaDireccion();
+    	 Bala b = new Bala(t.posicion.x,t.posicion.y,dir);
+    	 mapa.cargarDisparo(b);
      }
      
+      
      
-     private int obtenerDireccion(){
-    	 Random rand = new Random();
-    	 int x = rand.nextInt(4);
-    	 return x;
+     public void cambiarNivel(int nivel){
+    	 Estado state=null;
+    	 if(nivel==1)
+    		 state = new Nivel1();
+    	 else if(nivel==2)
+    		 	state = new Nivel2();
+    		 else if(nivel==3)
+    			 	state = new Nivel3();
+    			 else if(nivel==4)
+    				 	state = new Nivel4();
+    	 if(state!=null){
+    		 mapa.getJugador().setEstado(state); 
+    		 mapa.getJugador().cambiarNivel();
+    	 }
+    	 
      }
      
+     public void iniciarJuego(){
+    	 CargarEnemigos();
+    	 MoverEnemigos();
+    	 MoverDisparos();
+    //	 DisparoEnemigo();
+    	 
+     }
      
-     
+     private void CargarEnemigos(){
+		 Timer timer = new Timer (5000, new ActionListener ()
+         {
+             public void actionPerformed(ActionEvent e)
+             {
+            	if(mapa.cantEnemigosEnMapa()<4)
+            	   if(tablero.disponibles())
+            		   insertarEnemigo();
+             }
+         });
+         timer.start();
+
+	}
+	
+     private void DisparoEnemigo(){
+    	 Timer timer = new Timer (3000, new ActionListener ()
+         {
+             public void actionPerformed(ActionEvent e)
+             {
+             	for(int i=0; i<4;i++){
+        			 if(mapa.getEnemigo()[i]!=null)
+        				 insertarBalaEnMapa(mapa.getEnemigo()[i]);
+             	}       		
+             }
+         });
+         timer.start();
+     }
+	
+	private void MoverEnemigos(){
+		 Timer timer = new Timer (75, new ActionListener ()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+            	for(int i=0; i<4;i++){
+       			 if(mapa.getEnemigo()[i]!=null)
+       			   mapa.moverTanque(mapa.getEnemigo()[i].getUltimaDireccion(), mapa.getEnemigo()[i]);
+       		 }       		
+            }
+        });
+        timer.start();
+	}
+	
+	private void MoverDisparos(){
+		 Timer timer = new Timer (25, new ActionListener ()
+      {
+          public void actionPerformed(ActionEvent e)
+          {
+        	  for(Position<Bala> pos : mapa.getBalas().positions()){
+          		mapa.moverDisparo(pos);
+          	 }
+          	
+          }
+      });
+      timer.start();
+
+	}
      
 
 }

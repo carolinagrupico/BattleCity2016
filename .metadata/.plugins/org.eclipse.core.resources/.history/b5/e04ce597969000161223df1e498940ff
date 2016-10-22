@@ -1,0 +1,185 @@
+package GUI;
+
+import javax.swing.Timer;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.TextArea;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+
+import Logica.Logica;
+
+import Logica.Tablero;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+
+
+public class GUI extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+ 
+    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private int anchoPantalla= screenSize.width;
+    private int altoPantalla= screenSize.width;
+    private int altoPanel1=altoPantalla/3+50;
+    private int anchoPanel1=anchoPantalla/4+anchoPantalla/8+50;
+    private Logica logica;
+	private Tablero tablero;
+	private int nivelTanque;
+	
+    /**
+	 * Launch the application.
+	 */
+    
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI frame = new GUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 690, 519);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(null);
+		setContentPane(contentPane);
+		
+		JPanel panel1 = new JPanel();
+		panel1.setBackground(Color.BLACK);
+		contentPane.add(panel1);
+		panel1.setForeground(Color.GREEN);
+		panel1.setBounds(0, 0,530, 470);
+		panel1.setLayout(null);
+    	
+		
+		
+		 
+		JPanel panelTablero = new JPanel();
+		panelTablero.setBounds(540, 0, 124, 488);
+		contentPane.add(panelTablero);
+		panelTablero.setLayout(null);
+		
+		JLabel lblP = new JLabel("Puntos: 0");
+		lblP.setBounds(10, 443, 104, 23);
+		panelTablero.add(lblP);
+				
+		
+		
+		//keyReleased
+		//keyPressed
+		logica=new Logica(panel1,panel1);
+	
+	
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent arg0) {
+				
+			  int direccion=4; 
+				 if(arg0.getKeyCode()==KeyEvent.VK_UP) 
+			 		direccion=0; 
+				 	else if(arg0.getKeyCode()==KeyEvent.VK_DOWN)
+				 			direccion=1;
+				 		else if(arg0.getKeyCode()==KeyEvent.VK_LEFT)
+				 			direccion=2;
+				 			else if(arg0.getKeyCode()==KeyEvent.VK_RIGHT)
+				 					direccion=3;
+				
+		     if (direccion!=4){
+				
+					logica.getMapa().getJugador().mover(direccion,logica.getMapa().getLista(),logica.getMapa().getJugador().getRectangulo());
+				}
+				
+			}
+		});
+		
+		addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.VK_P==e.getKeyCode()){
+					logica.getMapa().insertarBala();
+				}
+			}
+		});
+		
+		
+		addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.VK_B==e.getKeyCode()){
+					logica.getMapa().eliminarEnemigo();
+					lblP.setText("Puntos: "+logica.getMapa().getJugador().getPuntos());
+				}
+			}
+		});
+		
+		nivelTanque = 1;
+		addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.VK_N==e.getKeyCode()){
+					nivelTanque++;
+					logica.cambiarNivel(nivelTanque);
+					if(nivelTanque==4)
+						nivelTanque=0;
+					
+				}
+			}
+		});
+		
+				
+		
+		tiempoCargarEnemigos();
+		tiempoMoverEnemigos();
+
+	}
+		
+	private void tiempoCargarEnemigos(){
+		 Timer timer = new Timer (5000, new ActionListener ()
+         {
+             public void actionPerformed(ActionEvent e)
+             {
+            	if(logica.getMapa().cantEnemigosEnMapa()<4)
+            	  if(logica.getTablero().disponibles())
+            		 logica.insertarEnemigo();
+             }
+         });
+         timer.start();
+
+	}
+	
+	
+	private void tiempoMoverEnemigos(){
+		 Timer timer = new Timer (75, new ActionListener ()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+            	logica.moverEnemigos();
+            }
+        });
+        timer.start();
+
+	}
+}
+	
+	
+

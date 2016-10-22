@@ -1,0 +1,32 @@
+package PowerUP;
+
+import java.awt.Image;
+import java.awt.Rectangle;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import Logica.Componente;
+
+public abstract class Power extends Componente{
+	
+	protected Icon graf;
+	
+	public Power(){
+		
+	}
+	
+	public JLabel getGrafico(int i){
+		if (label == null){
+			label= new JLabel();
+			label.setBounds(posicion.x, posicion.y, ancho, altura);
+			rec = new Rectangle(posicion.x,posicion.y,ancho,altura);
+            ImageIcon aux=(ImageIcon) imagen[i]; 
+     	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+     	   label.setIcon(icono);
+        }
+	  return label;
+	}
+
+}

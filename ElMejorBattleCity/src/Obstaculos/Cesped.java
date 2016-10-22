@@ -3,7 +3,8 @@ package Obstaculos;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+
+import Visitor.Visitor;
 
 
 public class Cesped extends Obstaculo{
@@ -21,4 +22,16 @@ public class Cesped extends Obstaculo{
 	 public Icon getIcon(){
 			return graf;
 		 }
+
+	
+	
+	@Override
+	public boolean dejoPasar(Visitor v) {
+		return v.puedePasar(this);
+	}
+	
+	public boolean meDestruye(Visitor v){
+		return false;
+	}
+	
 }

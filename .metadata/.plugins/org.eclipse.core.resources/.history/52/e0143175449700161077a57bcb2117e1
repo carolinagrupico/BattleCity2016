@@ -1,0 +1,16 @@
+package PowerUp;
+
+import javax.swing.Icon;
+
+import Logica.Componente;
+
+public class Power extends Componente{
+	
+	protected Icon graf;
+	
+	public Power(){
+		
+	}
+
+	
+}

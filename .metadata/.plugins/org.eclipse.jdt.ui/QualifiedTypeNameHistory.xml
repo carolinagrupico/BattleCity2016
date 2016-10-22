@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="com.sun.javafx.scene.paint.GradientUtils.Point"/>
-<fullyQualifiedTypeName name="java.awt.Point"/>
-<fullyQualifiedTypeName name="javax.swing.JLabel"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
-<fullyQualifiedTypeName name="Logica.Componente"/>
 <fullyQualifiedTypeName name="Obstaculos.CargarObstaculo"/>
+<fullyQualifiedTypeName name="Obstaculos.Ladrillo"/>
+<fullyQualifiedTypeName name="Tanques.Enemigos"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="State.Nivel2"/>
+<fullyQualifiedTypeName name="Tanques.Tanque"/>
+<fullyQualifiedTypeName name="State.Estado"/>
+<fullyQualifiedTypeName name="Lista.ListaDE"/>
+<fullyQualifiedTypeName name="Logica.Mapa"/>
+<fullyQualifiedTypeName name="Lista.PositionList"/>
+<fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
+<fullyQualifiedTypeName name="com.sun.javafx.geom.Rectangle"/>
+<fullyQualifiedTypeName name="java.awt.Rectangle"/>
+<fullyQualifiedTypeName name="javax.swing.JLabel"/>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="PowerUP.Power"/>
+<fullyQualifiedTypeName name="PowerUP.Estrella"/>
+<fullyQualifiedTypeName name="PowerUP.Granada"/>
+<fullyQualifiedTypeName name="PowerUP.Casco"/>
+<fullyQualifiedTypeName name="PowerUP.Pala"/>
+<fullyQualifiedTypeName name="PowerUP.tanque"/>
+<fullyQualifiedTypeName name="PowerUP.Reloj"/>
+<fullyQualifiedTypeName name="java.lang.Math"/>
+<fullyQualifiedTypeName name="javax.swing.Icon"/>
+<fullyQualifiedTypeName name="PowerUp.Power"/>
+<fullyQualifiedTypeName name="PowerUp.tanque"/>
+<fullyQualifiedTypeName name="PowerUp.Reloj"/>
+<fullyQualifiedTypeName name="PowerUp.Pala"/>
+<fullyQualifiedTypeName name="PowerUp.Granada"/>
+<fullyQualifiedTypeName name="PowerUp.Estrella"/>
+<fullyQualifiedTypeName name="PowerUp.Casco"/>
+<fullyQualifiedTypeName name="java.awt.Point"/>
+<fullyQualifiedTypeName name="Tanques.GameEnMovimiento"/>
+<fullyQualifiedTypeName name="Logica.Componente"/>
 </qualifiedTypeNameHistroy>

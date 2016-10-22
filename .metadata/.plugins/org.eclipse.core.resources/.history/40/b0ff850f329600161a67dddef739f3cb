@@ -1,0 +1,11 @@
+package PowerUP;
+
+import javax.swing.ImageIcon;
+
+public class Timer extends Power{
+	
+   public Timer(){
+	 super();
+	 graf = new ImageIcon(getClass().getResource("/Iconos/reloj.jpg"));
+   }
+}

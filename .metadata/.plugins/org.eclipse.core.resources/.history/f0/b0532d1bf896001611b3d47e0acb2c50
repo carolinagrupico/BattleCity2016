@@ -1,0 +1,12 @@
+package PowerUP;
+
+import javax.swing.ImageIcon;
+
+public class Granada extends Power{
+
+	public Granada(){
+		super();
+		imagen[1]= new ImageIcon(getClass().getResource("/Iconos/jugadorArriba.png"));
+		
+	}
+}

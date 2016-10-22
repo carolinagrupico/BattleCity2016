@@ -1,0 +1,13 @@
+package PowerUP;
+
+import javax.swing.ImageIcon;
+
+public class Casco extends Power{
+     
+	public Casco(){
+		super();
+		graf = new ImageIcon(getClass().getResource("/Iconos/casco.jpg"));
+	}
+	
+	
+}

@@ -1,0 +1,101 @@
+package Logica;
+
+
+import java.util.Random;
+import javax.swing.JPanel;
+
+import Lista.Position;
+import State.*;
+import Tanques.*;
+
+
+public class Logica {
+     private Mapa mapa;
+     private Tablero tablero;
+  
+     protected int anchoPanel1;
+     protected int altoPanel1;
+     private int cantPasosEnemigos;
+     
+     public Logica(JPanel panel1,JPanel panel2){
+    	 
+    	 mapa=new Mapa(panel1);
+    	 tablero=new Tablero(panel2);
+    	 mapa.iniciarCarga();
+    	 tablero.insertarTab();
+    	 insertarEnemigo();
+    	 cantPasosEnemigos=5;
+    	 
+     } 
+     
+     public Mapa getMapa(){
+    	 return mapa;
+     }
+     
+     public Tablero getTablero(){
+    	 return tablero;
+     }
+     
+     public void insertarEnemigo(){
+    	 Enemigos enemigo = tablero.getEnemigo();
+    	 mapa.cargarEnemigo(enemigo);
+    	 
+     }
+     
+     public void insertarBalaEnMapa(Tanque t){
+    	 int dir =t.getUltimaDireccion();
+    	 Bala b = new Bala(t.posicion.x,t.posicion.y,dir, mapa);
+    	 mapa.cargarDisparo(b);
+     }
+     
+     public void moverEnemigos(){
+    	 	
+    	 
+    		 for(int i=0; i<4;i++){
+    			 if(mapa.getEnemigo()[i]!=null)
+    			   mapa.moverTanque(obtenerDireccion(mapa.getEnemigo()[i]), mapa.getEnemigo()[i]);
+    		 }
+    		 
+    		 if(cantPasosEnemigos==0)
+    			 cantPasosEnemigos=5;
+    		 
+    		 cantPasosEnemigos--;
+    		 
+     }
+     
+     public void moverBalas(){
+    	 for(Position<Bala> pos : mapa.getBalas().positions()){
+    		mapa.moverDisparo(pos);
+    	 }
+     }
+     
+     private int obtenerDireccion(Tanque e){
+    	 Random rand = new Random();
+    	 if(cantPasosEnemigos==0){   		 
+    	 		int x = rand.nextInt(4);
+    	 		e.setUltimaDireccion(x);
+    	 }
+
+    	 return e.getUltimaDireccion();
+     }
+     
+     
+     public void cambiarNivel(int nivel){
+    	 Estado state=null;
+    	 if(nivel==1)
+    		 state = new Nivel1();
+    	 else if(nivel==2)
+    		 	state = new Nivel2();
+    		 else if(nivel==3)
+    			 	state = new Nivel3();
+    			 else if(nivel==4)
+    				 	state = new Nivel4();
+    	 if(state!=null){
+    		 mapa.getJugador().setEstado(state); 
+    		 mapa.getJugador().cambiarNivel();
+    	 }
+    	 
+     }     
+     
+
+}

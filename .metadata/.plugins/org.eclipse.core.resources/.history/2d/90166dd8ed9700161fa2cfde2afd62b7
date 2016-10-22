@@ -1,0 +1,17 @@
+package Visitor;
+import Logica.Componente;
+import Obstaculos.*;
+import Tanques.*;
+
+public interface Visitor {
+	
+	public boolean puedePasar(Componente e);
+	public boolean puedePasar(Componente e);
+	public boolean puedePasar(Componente e);
+	public boolean puedePasar(Componente e);
+	public boolean puedePasar(Componente e);
+	public boolean puedePasar(Componente e);
+	public boolean destruyo();
+	
+	
+}

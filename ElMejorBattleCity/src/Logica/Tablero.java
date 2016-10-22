@@ -9,6 +9,7 @@ public class Tablero {
 	private JPanel panel2;
 	private int cantEnemigos;
 	
+	
 
 	public Tablero(JPanel panel2) {
 		this.panel2=panel2;
@@ -19,8 +20,8 @@ public class Tablero {
 		
 	}
 	
-	public Enemigos getEnemigo(){
-		Enemigos enemigo=null;
+	public Enemigo getEnemigo(){
+		Enemigo enemigo=null;
 		if(cantEnemigos%4==0)
 			enemigo=new TanqueBasico();
 		if(cantEnemigos%4==1)
