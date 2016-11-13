@@ -1,50 +1,45 @@
 package Tanques;
 import MovimientoEnemigo.*;
-import Visitor.Visitor;
+import Visitor.*;
 
 import java.awt.Point;
 
 public abstract class Enemigo extends Tanque{
 	
-	
-	protected int golpesQueResiste;
-	protected int velocidadDisparo;
 	protected Movimiento movimiento;
 
 
 	public Enemigo() {
 		super();
+		V = new visitorEnemigo();
+		E = new elementoEnemigo();
+		disparoSimultaneo=1;
 		posicion = new Point(100,1);		
 		ultimaDireccion=1;
 		movimiento= new MovimientoA();
 	}
 	
-	
-	public abstract int getGolpes();
-	public abstract int getVelocidadDisparo();
-	
-	
+	//-----------------------------------------------------------------
+
+	public int getVelocidadDisparo() {
+		
+		return velocidadDisparo;
+	}
 	
 	public int getUltimaDireccion(){
 		return movimiento.obtenerDireccion();
-	}	
+	}
 	
-	public void setUltimaDireccion(int d) {
-		ultimaDireccion=d;
+	//-----------------------------------------------------------------
+
+	public void generarNuevaDireccion(){
+		movimiento.establecerDireccion();
+	}
+	
 		
-	}
 	
-	public boolean puedePasar(Enemigo e) {
-		return true;
-	}
 	
-	public boolean puedePasar(Jugador j){
-		return false;
-	}
 	
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
 	
 
 }

@@ -1,0 +1,30 @@
+package Obstaculos;
+
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import Visitor.*;
+
+
+public class Cesped extends Obstaculo{
+	
+	 public Cesped(){
+		 super();
+		 
+		 E = new elementoCesped();
+		 
+		 graf = new ImageIcon(getClass().getResource("/Iconos/cesped.png"));
+	 }
+	 
+	 
+	
+	 public String getNombre(){
+			return "cesped";
+		}
+	 public Icon getIcon(){
+			return graf;
+		 }
+	
+	
+}

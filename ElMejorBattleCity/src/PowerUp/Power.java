@@ -10,47 +10,39 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import Logica.Componente;
-import Obstaculos.Acero;
-import Obstaculos.Agua;
-import Obstaculos.Aguila;
-import Obstaculos.Cesped;
-import Obstaculos.Ladrillo;
-import Tanques.GameEnMovimiento;
-import Tanques.Tanque;
-import Visitor.Elemento;
-import Visitor.Visitor;
 
-public class Power extends Componente implements Elemento{
+
+public class Power extends Componente{
 	
 	protected Icon graf;
+	protected elementoPower e;
 	
 	public Power(){
+		label= new JLabel();  
 		ancho=25;
 		altura=25;
 	}
 	
-	public JLabel getGrafico(Point pos){
-		label= new JLabel();
-		rec = new Rectangle(pos.x,pos.y,ancho,altura);
-		label.setBounds(rec);
-        ImageIcon aux=(ImageIcon) graf; 
- 	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
- 	   label.setIcon(icono);
-    
-  return label;
+	//-----------------------------------------------------------------
+	
+	public void set(Point p){
+		    rec = new Rectangle(p.x,p.y,ancho,altura);
+	    	label.setBounds(rec);
+	        ImageIcon aux=(ImageIcon) graf;
+	 	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+	 	    label.setIcon(icono);
 	}
 
-	@Override
-	public boolean dejoPasar(Visitor v) {
-		// TODO Auto-generated method stub
-		return false;
+	//-----------------------------------------------------------------
+
+
+	public elementoPower getElemento() {
+		return e;
 	}
 
-	@Override
-	public boolean meDestruye(Visitor v) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
+
+
 
 	
 

@@ -1,7 +1,10 @@
 package Visitor;
 
 public interface Elemento {
+
+	public boolean dejoPasar(Visitor v);
+
 	
-	public boolean dejoPasar(Visitor v); 
-	public boolean meDestruye(Visitor v);
+	public boolean afectar(Visitor v);
+
 }

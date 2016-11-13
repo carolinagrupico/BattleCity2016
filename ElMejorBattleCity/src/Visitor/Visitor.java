@@ -1,18 +1,25 @@
 package Visitor;
-import Obstaculos.*;
-import Tanques.*;
+
+
 
 public interface Visitor {
+
+	public boolean puedePasar(elementoLadrillo e);
+
+	public boolean puedePasar(elementoAcero e);
+
+	public boolean puedePasar(elementoAgua e);
+
+	public boolean puedePasar(elementoCesped e);
+
+	public boolean puedePasar(elementoAguila e);
+
+	public boolean puedePasar(elementoEnemigo e);
+
+	public boolean puedePasar(elementoJugador j);
 	
-	public boolean puedePasar(Ladrillo e);
-	public boolean puedePasar(Acero e);
-	public boolean puedePasar(Agua e);
-	public boolean puedePasar(Cesped e);
-	public boolean puedePasar(Aguila e);
-	public boolean puedePasar(Enemigo e);
-	public boolean puedePasar(Jugador j);
-	
+	public boolean meAfecta(elementoPower e);
+
 	public boolean destruyo();
-	
-	
+
 }

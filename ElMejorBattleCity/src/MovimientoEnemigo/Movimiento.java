@@ -1,3 +1,4 @@
+
 package MovimientoEnemigo;
 
 public interface Movimiento {

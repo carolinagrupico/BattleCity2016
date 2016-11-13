@@ -1,0 +1,18 @@
+
+ l l l l l l l
+ l l l l l l l
+ l l l l l l l
+ l c lal c l l
+ l l l l l l l
+ l l b b l l l
+ l l l l l l l
+ l l     l l l
+     l l     ll 
+a ll     ll a l
+     l l
+ l l lll l l  l
+ c c l l c c l c
+ l l l l l l c l
+ l l     l l l c
+ l l lll l l l l
+     lAl

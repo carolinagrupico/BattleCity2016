@@ -12,10 +12,7 @@
 <fullyQualifiedTypeName name="Lista.ListaDE"/>
 <fullyQualifiedTypeName name="Logica.Mapa"/>
 <fullyQualifiedTypeName name="Lista.PositionList"/>
-<fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
 <fullyQualifiedTypeName name="com.sun.javafx.geom.Rectangle"/>
-<fullyQualifiedTypeName name="java.awt.Rectangle"/>
-<fullyQualifiedTypeName name="javax.swing.JLabel"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
 <fullyQualifiedTypeName name="PowerUP.Power"/>
 <fullyQualifiedTypeName name="PowerUP.Estrella"/>
@@ -25,7 +22,6 @@
 <fullyQualifiedTypeName name="PowerUP.tanque"/>
 <fullyQualifiedTypeName name="PowerUP.Reloj"/>
 <fullyQualifiedTypeName name="java.lang.Math"/>
-<fullyQualifiedTypeName name="javax.swing.Icon"/>
 <fullyQualifiedTypeName name="PowerUp.Power"/>
 <fullyQualifiedTypeName name="PowerUp.tanque"/>
 <fullyQualifiedTypeName name="PowerUp.Reloj"/>
@@ -36,4 +32,12 @@
 <fullyQualifiedTypeName name="java.awt.Point"/>
 <fullyQualifiedTypeName name="Tanques.GameEnMovimiento"/>
 <fullyQualifiedTypeName name="Logica.Componente"/>
+<fullyQualifiedTypeName name="javax.swing.Timer"/>
+<fullyQualifiedTypeName name="java.util.TimerTask"/>
+<fullyQualifiedTypeName name="javax.swing.JLabel"/>
+<fullyQualifiedTypeName name="java.awt.Rectangle"/>
+<fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
+<fullyQualifiedTypeName name="javax.swing.Icon"/>
+<fullyQualifiedTypeName name="java.awt.Image"/>
+<fullyQualifiedTypeName name="javax.swing.JButton"/>
 </qualifiedTypeNameHistroy>

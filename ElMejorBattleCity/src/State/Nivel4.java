@@ -4,10 +4,11 @@ import Tanques.Tanque;
 
 public class Nivel4 implements Estado{
 	
-	public Nivel4(){
-		
-	}
+	public Nivel4(){}
+	
+	//-----------------------------------------------------------------
+
 	public void ejecutarAccion(Tanque t){
-		t.setVelocidad(20);
+		t.setVelocidad(8);
 	}
 }

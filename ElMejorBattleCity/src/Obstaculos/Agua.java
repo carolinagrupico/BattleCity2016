@@ -4,7 +4,7 @@ package Obstaculos;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
 
 
 public class Agua extends Obstaculo{
@@ -12,10 +12,11 @@ public class Agua extends Obstaculo{
 	
 	 public Agua(){
 		 super();
+		 E = new elementoAgua();
 		 graf = new ImageIcon(getClass().getResource("/Iconos/agua.png"));
 	 }
 	 
-	 
+	//-----------------------------------------------------------------
 	 
 	 public String getNombre(){
 			return "agua";
@@ -24,14 +25,4 @@ public class Agua extends Obstaculo{
 			return graf;
 		 }
 
-
-	
-	@Override
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
-	public boolean meDestruye(Visitor v){
-		return false;
-	}
-	
 }

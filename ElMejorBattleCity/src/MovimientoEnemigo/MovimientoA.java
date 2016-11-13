@@ -36,7 +36,7 @@ public class MovimientoA implements Movimiento{
 	
 	public void establecerCantPasos(){
 		Random rand = new Random(); 		 
-   	 	int x = rand.nextInt(9);
+   	 	int x = rand.nextInt(15-5+1)+5;
    	 	cantPasos=x+1;
 	} 
 	

@@ -1,0 +1,44 @@
+package Logica;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import Tanques.*;
+
+
+public class Tablero {
+
+	private JPanel panel;
+    private JLabel puntos;
+    private JLabel vidas;
+    private int cantVidas;
+    
+	public Tablero(JPanel panel2) {
+		this.panel=panel2;
+	    insertarPuntos();
+	    insertarVidas();	
+	}
+	
+	public void actualizarPuntos(int i){
+		puntos.setText("Puntos: "+i);
+	}
+	
+	private void insertarPuntos(){
+		puntos = new JLabel("Puntos: 0");
+		puntos.setBounds(10, 420, 104, 23);
+		panel.add(puntos);
+	}
+	private void insertarVidas(){
+		vidas = new JLabel("Vidas: "+4);
+		vidas.setBounds(10, 300, 104, 23);
+		panel.add(vidas);
+	} 
+	public void actualizarVidas(int x){
+		vidas.setText("Vidas: "+x);
+	}
+	
+	
+	
+	
+	
+
+}

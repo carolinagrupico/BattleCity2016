@@ -7,11 +7,7 @@ import java.awt.Rectangle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
-import javax.swing.JPanel;
-
-import Lista.*;
-import Obstaculos.Obstaculo;
+import Visitor.Elemento;
 
 
 
@@ -20,80 +16,37 @@ public abstract class Componente {
    protected Rectangle rec;
    protected Point posicion;
    protected Icon [] imagen;
-   protected int velocidadM;
    protected  int ancho;
    protected int altura;
    
- 
+   public Componente(){}
    
-   public Componente(){
-	   
-   }
-   
-   
-   public int getVelocidad() {		
-		return velocidadM;
+   //-----------------------------------------------------------------
+
+   public JLabel getGrafico(int i){
+		if (label == null){
+			label= new JLabel();
+			rec = new Rectangle(posicion.x,posicion.y,ancho,altura);
+			label.setBounds(rec);
+           ImageIcon aux=(ImageIcon) imagen[i]; 
+    	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+    	   label.setIcon(icono);
+       }
+	  return label;
 	}
-   
-   public void insertar(JPanel panelMapa, JLabel l,Rectangle r){
-	   panelMapa.add(l);
-	   panelMapa.scrollRectToVisible(r);
-	   
-   }
-   
-   
-   public void borrar(JPanel panelMapa,JLabel l){
-	   panelMapa.remove(l);
-	   panelMapa.revalidate();
-	   panelMapa.repaint();
-   }
-   
-   
+  
    public Rectangle getRectangulo(){
 		return rec;
-	}   
+   }   
+   
+   public Point getPosicion(){
+		  return posicion;
+   }
+   
+   //-----------------------------------------------------------------
+   
+   public abstract Elemento getElemento();
    
    
-   
-   public void actualizarGrafico(int dir){		
-		
-	   ImageIcon aux=(ImageIcon) imagen[dir];
-	   Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getWidth(), Image.SCALE_DEFAULT));
-	   label.setIcon(icono);
-	   label.setBounds(posicion.x, posicion.y, ancho, altura);
-	   rec.setBounds(posicion.x, posicion.y, ancho, altura);
-     
-	}
-	
-	
-	//Actualiza posicion del JLabel
-	public void mover(int dir){		
-	         
-	   if (dir == 0){
-		   if(posicion.y-velocidadM>0)
-				   posicion.setLocation(posicion.x, posicion.y-velocidadM);
-			
-			}
-			else if (dir == 1){
-				 if(posicion.y+velocidadM<444)
-					posicion.setLocation(posicion.x, posicion.y+velocidadM);
-					 				 
-		    	}
-				else if (dir == 2){
-					if(posicion.x - velocidadM>-2)
-						posicion.setLocation(posicion.x - velocidadM, posicion.y);
-					
-				   }
-					else if  (dir == 3){
-						if(posicion.x + velocidadM<308)
-							posicion.setLocation(posicion.x +velocidadM, posicion.y);
-						
-					 }
-
-      actualizarGrafico(dir);
-    }
-	
-   
-  
    
 }

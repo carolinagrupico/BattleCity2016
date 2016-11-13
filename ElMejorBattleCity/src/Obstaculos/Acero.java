@@ -4,19 +4,17 @@ package Obstaculos;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
-
-
-
+import Visitor.*;
 
 public class Acero extends Obstaculo{	
 	
 	 public Acero(){
 		 super();
+		 E = new elementoAcero();
 		 graf = new ImageIcon(getClass().getResource("/Iconos/acero.png"));
-		 
-	 }
+      }
 	 
+	//-----------------------------------------------------------------
 	 
 	 public String getNombre(){
 			return "acero";
@@ -24,16 +22,5 @@ public class Acero extends Obstaculo{
 	 public Icon getIcon(){
 			return graf;
 		 }
-
-
-
-	@Override
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
-	
-	public boolean meDestruye(Visitor v){
-		return false;
-	}
 	
 }

@@ -1,0 +1,36 @@
+package Visitor;
+
+import Logica.Logica;
+import Logica.Mapa;
+import State.Estado;
+import State.Nivel1;
+import State.Nivel2;
+import State.Nivel3;
+import State.Nivel4;
+
+public class elementoEstrella implements elementoPower {
+	
+	private Logica l;
+	private Mapa m;
+
+	public void set(Logica log, Mapa map){
+		m=map;
+		l=log;
+	}
+	
+	@Override
+	public boolean dejoPasar(Visitor v) {
+		
+		return true;
+	}
+
+	@Override
+	public boolean afectar(Visitor v) {
+		if(v.meAfecta(this))			
+	      		 m.getJugador().cambiarNivel();
+		
+		return v.meAfecta(this);
+		
+	}
+
+}

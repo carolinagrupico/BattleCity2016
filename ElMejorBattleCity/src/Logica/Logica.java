@@ -1,138 +1,407 @@
 package Logica;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
+
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import Bala.Bala;
+import Bala.balaEnemigo;
+
+import Lista.InvalidPositionException;
 import Lista.Position;
-import State.*;
+import Lista.PositionList;
+import Obstaculos.Obstaculo;
+
 import Tanques.*;
 
 
-public class Logica {
+public class Logica implements ActionListener{
      private Mapa mapa;
      private Tablero tablero;
-  
-     protected int anchoPanel1;
-     protected int altoPanel1;
+     private int enemigosParaNivel;
+     private int enemigosParaPower;
+     private int nivel;
+     private Timer t1,t2,t3,t4;
+     private JButton boton1;
+ 	 private JButton boton2;
+ 	 private JPanel panelM;
+ 	 private JLabel gameOver;
+ 	 private JLabel winner;
     
      
-     public Logica(JPanel panel1,JPanel panel2){
-    	 
-    	 mapa=new Mapa(panel1);
-    	 tablero=new Tablero(panel2);
-    	 mapa.iniciarCarga();
-    	 tablero.insertarTab();
-    	 insertarEnemigo();
-    	 
-     } 
-     
-     public Mapa getMapa(){
-    	 return mapa;
-     }
-     
+     public Logica(JPanel panelM,JPanel panelT,JPanel CP){
+    	 this.panelM=panelM;
+    	 mapa=new Mapa(panelM);
+    	 tablero=new Tablero(panelT);
+    	 enemigosParaNivel=0;
+    	 enemigosParaPower=0;
+    	 nivel=1; 
+    } 
     
-     
-     public void insertarEnemigo(){
-    	 Enemigo enemigo = tablero.getEnemigo();
-    	 mapa.cargarEnemigo(enemigo);
-    	 
-     }
-     
-     public void insertarBalaEnMapa(Tanque t){
-    	 int dir =t.getUltimaDireccion();
-    	 Bala b = new Bala(t.posicion.x,t.posicion.y,dir);
-    	 mapa.cargarDisparo(b);
-     }
-     
+ 	//-----------------------------------------------------------------
       
-     
-     public void cambiarNivel(int nivel){
-    	 Estado state=null;
-    	 if(nivel==1)
-    		 state = new Nivel1();
-    	 else if(nivel==2)
-    		 	state = new Nivel2();
-    		 else if(nivel==3)
-    			 	state = new Nivel3();
-    			 else if(nivel==4)
-    				 	state = new Nivel4();
-    	 if(state!=null){
-    		 mapa.getJugador().setEstado(state); 
-    		 mapa.getJugador().cambiarNivel();
-    	 }
-    	 
-     }
-     
-     public void iniciarJuego(){
-    	 CargarEnemigos();
-    	 MoverEnemigos();
-    	 MoverDisparos();
-    //	 DisparoEnemigo();
-    	 
-     }
-     
-     private void CargarEnemigos(){
-		 Timer timer = new Timer (5000, new ActionListener ()
-         {
-             public void actionPerformed(ActionEvent e)
-             {
-            	if(mapa.cantEnemigosEnMapa()<4)
-            	   if(tablero.disponibles())
-            		   insertarEnemigo();
-             }
-         });
-         timer.start();
-
-	}
-	
-     private void DisparoEnemigo(){
-    	 Timer timer = new Timer (3000, new ActionListener ()
-         {
-             public void actionPerformed(ActionEvent e)
-             {
-             	for(int i=0; i<4;i++){
-        			 if(mapa.getEnemigo()[i]!=null)
-        				 insertarBalaEnMapa(mapa.getEnemigo()[i]);
-             	}       		
-             }
-         });
-         timer.start();
-     }
-	
-	private void MoverEnemigos(){
-		 Timer timer = new Timer (75, new ActionListener ()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-            	for(int i=0; i<4;i++){
-       			 if(mapa.getEnemigo()[i]!=null)
-       			   mapa.moverTanque(mapa.getEnemigo()[i].getUltimaDireccion(), mapa.getEnemigo()[i]);
-       		 }       		
-            }
-        });
-        timer.start();
-	}
-	
-	private void MoverDisparos(){
-		 Timer timer = new Timer (25, new ActionListener ()
+    public void iniciarJuego(int n){
+    	
+       Random rand = new Random(); 		 
+       int x = rand.nextInt(3);
+       sonido("inicio"+x); 	
+       mapa.iniciarCarga(n);
+       CargarEnemigos();
+       MoverEnemigos(true);
+       MoverBalas(true);
+       DisparoEnemigo(true);
+    }
+    
+    
+    public void CargarEnemigos(){
+		 t4 = new Timer (5000, new ActionListener ()
       {
           public void actionPerformed(ActionEvent e)
           {
-        	  for(Position<Bala> pos : mapa.getBalas().positions()){
-          		mapa.moverDisparo(pos);
-          	 }
-          	
+         	if(mapa.cantEnemigosEnMapa()<4)
+         	   if(mapa.disponibles()){
+         		  Random rand = new Random(); 		 
+			   	 	int x = rand.nextInt(2);
+         		   mapa.insertarEnemigo();
+         		   sonido("saleTanque"+x);
+         	   	}
+         	
           }
       });
-      timer.start();
+      t4.start();
 
 	}
      
+     public void DisparoEnemigo(boolean star){
+    	 if(t1==null){
+    		 t1 = new Timer (2000, new ActionListener (){
+    			 public void actionPerformed(ActionEvent e){
+    				 for(int i=0; i<4;i++){
+    					 if(mapa.getArregloEnemigo()[i]!=null ){
+    						 
+    						 Enemigo aux = mapa.getArregloEnemigo()[i];
+    						 
+    						 if(puedeDisparar(aux)){
+    							 balaEnemigo balaE= new balaEnemigo(aux.posicion.x,aux.posicion.y,aux.getUltimaDireccion(),aux.getVelocidadDisparo(),aux.getNroSerie());	 
+    							 mapa.cargarDisparo(balaE);
+    							 sonido("disparoEnemigo");
+    						 }
+    					 	}
+    				 	}       		
+    			 }
+    		 });
+    	 }
+    	 if(star)
+    		 t1.start();
+    	 else t1.stop();
+     }
+     public void sonido(String sonido){
+     	Clip clip;	
+     	try{
+ 			clip = AudioSystem.getClip();
+ 			clip.open(AudioSystem.getAudioInputStream(getClass().getResource("/Sonidos/"+sonido+".wav")));
+ 			clip.start();
+ 		}catch (Exception e) {			
+ 			e.printStackTrace();
+ 		}
+     }
+     
+	public void MoverEnemigos(boolean star){
+		if(t2==null){
+			t2 = new Timer (75, new ActionListener (){
+				public void actionPerformed(ActionEvent e){
+					for(int i=0; i<4;i++){
+							if(mapa.getArregloEnemigo()[i]!=null){
+								int ultDir = mapa.getArregloEnemigo()[i].getUltimaDireccion();
+								moverTanque(ultDir, mapa.getArregloEnemigo()[i]);
+								//si el tanque no avanza, se genera una nueva direccion
+								if(!mapa.getArregloEnemigo()[i].puedeAvanzar() || hayColision(mapa.getArregloEnemigo()[i],ultDir))
+									mapa.getArregloEnemigo()[i].generarNuevaDireccion();
+							}
+						}       		
+							
+					}
+			});
+		 }
+		 if(star)
+    		 t2.start();
+    	 else t2.stop();
+	}
+	
+	public void  MoverBalas(boolean star){
+		if(t3==null){
+			t3 = new Timer (25, new ActionListener (){
+				public void actionPerformed(ActionEvent e){
+					for(Position<Bala> pos : mapa.getBalas().positions()){
+						moverDisparo(pos);
+						}          	
+					}
+				});
+			}
+		 if(star)
+    		 t3.start();
+    	 else t3.stop();
+	}
+	
+	public void moverTanque2(int dir){
+		Tanque t = mapa.getJugador();
+		if(!hayColision(t,dir))
+			   t.mover(dir);
+			t.actualizarGrafico(dir);
+			t.setUltimaDireccion(dir);
+	}
+	
+	public void moverTanque(int dir,Tanque t){
+		if(!hayColision(t,dir))
+		   t.mover(dir);
+		t.actualizarGrafico(dir);	
+	}
+	
+	public void moverDisparo(Position<Bala> posBala){
+		
+		if(hayColision(posBala.element(),posBala.element().getDireccion()) || !posBala.element().puedeAvanzar()){
+			PositionList<Bala> balas = mapa.getBalas();
+			try {				
+				balas.remove(posBala);
+				mapa.borrar(posBala.element().getGrafico(0));
+				} catch (InvalidPositionException e){}
+			}
+		else posBala.element().mover(posBala.element().getDireccion());
+	}
+	
+    private void gameOver(){
+    	nivel = 1;
+    	enemigosParaPower=0;
+    	mapa.liberarPanel();
+     	gameOver = mapa.agregarEnIcon("gameovercont");
+     	t4.stop(); // temporizador que carga enemigos al mapa.
+    	MoverEnemigos(false);
+   	 	MoverBalas(false);
+   	 	DisparoEnemigo(false);
+   	    agregarBotones("yes");
+
+    }
+    
+    private void agregarBotones(String a){
+  	 
+       if (a.equals("yes")){
+	    boton1= new JButton(new ImageIcon(getClass().getResource("/Iconos/yes.jpg")));
+	    panelM.add(boton1);	
+	    boton1.setBounds(110, 200, 60, 30);
+	    boton1.setBorder(null);
+	    boton1.addActionListener(this);
+       }
+       else if (a.equals("yesg")){
+        boton2 = new JButton(new ImageIcon(getClass().getResource("/Iconos/yesg.jpg")));
+   	    panelM.add(boton2);	
+   	    boton2.setBounds(110, 200, 60, 30);
+   	    boton2.setBorder(null);
+	    boton2.addActionListener(this);
+       }
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == boton1) {
+        	mapa.borrar(gameOver);
+         	panelM.remove(boton1);
+        	mapa.reset();
+   	 		mapa.getJugador().setVidas(4);
+   	 		iniciarJuego(nivel);
+        }
+        else if (e.getSource() == boton2) {
+        	   mapa.borrar(winner);
+         	   panelM.remove(boton2);
+        	   mapa.reset();
+   	 		   mapa.getJugador().setVidas(4);
+   	 		   iniciarJuego(nivel);
+             }
+    }
+   	
+    private void winer(){
+    	
+    	sonido("nivel");
+    	
+    	enemigosParaPower=0;
+    	
+    	t4.stop(); // temporizador que carga enemigos al mapa.
+    	MoverEnemigos(false);
+   	 	MoverBalas(false);
+   	 	DisparoEnemigo(false);
+    	nivel++;
+    	
+    	if(nivel==5){
+    		nivel=1;
+    		mapa.liberarPanel();
+         	winner = mapa.agregarEnIcon("winner");
+         	t4.stop(); // temporizador que carga enemigos al mapa.
+        	MoverEnemigos(false);
+       	 	MoverBalas(false);
+       	 	DisparoEnemigo(false);
+       	    agregarBotones("yesg");
+    	}
+    	else{ mapa.reset();
+ 		   mapa.getJugador().setVidas(4);
+ 		   iniciarJuego(nivel);
+    	}
+    }
+    
+    public void setMuertes(){
+    	
+    	enemigosParaNivel++;
+    	enemigosParaPower++;
+    	
+		if (enemigosParaNivel == 16){
+		    winer();
+		    enemigosParaNivel=0;
+		}
+		
+		if (enemigosParaPower == 4 ){
+			 if(mapa.getPowerUp()==null)
+				 mapa.insertarPower();
+		         enemigosParaPower=0;
+		}
+    }
+    
+    public Mapa getMapa(){
+   	 return mapa;
+    }
+    
+    public boolean puedeDisparar(Tanque t){
+    	
+    	int misDisparosEnMapa=0;
+    	
+    	for(Position<Bala> p : mapa.getBalas().positions())
+    		if(p.element().getNroSerie()==t.getNroSerie())
+    			misDisparosEnMapa++;
+    		
+    	return t.getDisparosSimultaneos()>misDisparosEnMapa;
+    } 
+    
+    private Rectangle simuladorRectangulo(int dir,GameEnMovimiento t){
+		Rectangle aux = new Rectangle(t.getRectangulo().x,t.getRectangulo().y,t.getRectangulo().width,t.getRectangulo().height);
+		if(dir==0){
+			aux.setLocation(t.getRectangulo().x, t.getRectangulo().y -t.getVelocidad());
+			}
+			else if(dir==1){
+				aux.setLocation(t.getRectangulo().x, t.getRectangulo().y +t.getVelocidad());
+					}
+					else if(dir==2){
+						aux.setLocation(t.getRectangulo().x-t.getVelocidad(), t.getRectangulo().y);
+							}
+							else if(dir==3){
+								aux.setLocation(t.getRectangulo().x + t.getVelocidad(), t.getRectangulo().y);
+									}
+		return aux;
+	}
+	
+    private boolean hayColision(GameEnMovimiento g,int dir){
+		
+		Rectangle aux = simuladorRectangulo(dir,g);
+		
+		PositionList<Obstaculo> listaObstaculo= mapa.getObstaculo();
+		
+		for(Position<Obstaculo> p : listaObstaculo.positions()){
+			if(p.element().getRectangulo().intersects(aux) && !p.element().getElemento().dejoPasar(g.getVisitor())){
+				if(p.element().getElemento().afectar(g.getVisitor())){
+					
+						sonido("romperPared");
+			   	 	
+					try {
+						if(p.element().equals(mapa.getAguila())){
+							gameOver();
+							}
+						else{
+							listaObstaculo.remove(p);	
+							mapa.borrar(p.element().getGrafico(0));						
+						 	}
+						} catch (InvalidPositionException e) {}
+					}
+				
+				if(p.element().getNombre()=="acero")
+					sonido("golpeAcero");
+				
+				return true;
+				
+				}
+				
+			
+			
+			}
+		
+		 
+		Enemigo [] enemigosEnBatalla= mapa.getArregloEnemigo(); 
+		
+		
+		
+		for(int i=0;i<enemigosEnBatalla.length; i++){
+				if(enemigosEnBatalla[i]!=null && !enemigosEnBatalla[i].equals(g))					
+					if(enemigosEnBatalla[i].getRectangulo().intersects(aux) && !enemigosEnBatalla[i].getElemento().dejoPasar(g.getVisitor())){
+						
+						if(enemigosEnBatalla[i].getElemento().afectar(g.getVisitor())){
+							
+							enemigosEnBatalla[i].setVidas(enemigosEnBatalla[i].getVidas()-1);
+							
+							if(enemigosEnBatalla[i].getVidas()==0){
+								
+								Random rand = new Random(); 		 
+						   	 	int x = rand.nextInt(4);
+						   	 	
+						   	 	sonido("explocion"+x);
+								
+								mapa.getJugador().setPuntos(enemigosEnBatalla[i].getPuntos()); 
+								tablero.actualizarPuntos(mapa.getJugador().getPuntos());
+								mapa.borrar(enemigosEnBatalla[i].getGrafico(0));
+								enemigosEnBatalla[i]=null;
+							
+							
+								if(mapa.getJugador().getPuntos()>=2000)
+									mapa.getJugador().cambiarNivel();
+							
+								
+								setMuertes();
+								
+						}
+					}
+					return true;
+				}
+			}
+			
+		if(mapa.getJugador().getRectangulo().intersects(aux) && !mapa.getJugador().getElemento().dejoPasar(g.getVisitor())){
+			if(mapa.getJugador().getElemento().afectar(g.getVisitor())){
+				mapa.restablecerJugador();
+				tablero.actualizarVidas(mapa.getJugador().getVidas());
+				if(mapa.getJugador().getVidas()<=0)
+					gameOver();
+				}
+			
+			return true;	
+			}
+		
+		if(mapa.getPowerUp()!=null){
+			mapa.getPowerUp().getElemento().set(this, mapa);
+			if(mapa.getPowerUp().getRectangulo().intersects(aux) && mapa.getPowerUp().getElemento().afectar(g.getVisitor())){
+				
+				sonido("vidas");
+				mapa.borrar(mapa.getPowerUp().getGrafico(0));
+				mapa.setPowerUp(null);
+				}
+		}
+	  return false;
+	}
+    
 
 }

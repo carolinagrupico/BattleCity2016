@@ -6,7 +6,7 @@ package Obstaculos;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
 
 
 
@@ -14,11 +14,12 @@ public class Ladrillo extends Obstaculo{
 	
 	 public Ladrillo(){
 		 super();
+		 E = new elementoLadrillo();
 		 graf = new ImageIcon(getClass().getResource("/Iconos/Ladrillo.png"));
 
-	 }	 
+	 }	
 	 
-	 
+	//-----------------------------------------------------------------
 	
 	public String getNombre(){
 		return "ladrillo";
@@ -28,17 +29,7 @@ public class Ladrillo extends Obstaculo{
 		return graf;
 	 }
 
-	
 
-	@Override
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
-	
-
-	public boolean meDestruye(Visitor v){
-		return v.destruyo();
-	}
 
 
 }

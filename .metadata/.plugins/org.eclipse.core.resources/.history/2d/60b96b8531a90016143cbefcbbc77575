@@ -1,0 +1,31 @@
+package Obstaculos;
+
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import Visitor.*;
+
+
+
+
+public class Acero extends Obstaculo{	
+	
+	 public Acero(){
+		 super();
+		 
+		 E = new elementoAcero();
+		 
+		 graf = new ImageIcon(getClass().getResource("/Iconos/acero.png"));
+		 
+	 }
+	 
+	 
+	 public String getNombre(){
+			return "acero";
+		}
+	 public Icon getIcon(){
+			return graf;
+		 }
+	
+}

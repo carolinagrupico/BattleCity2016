@@ -1,0 +1,72 @@
+package Logica;
+
+import java.awt.Image;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+public class Tablero {
+
+	private JPanel panel;
+    private JLabel puntos;
+    private JLabel vidas;
+    private JLabel [] enemigosVivos;
+    private int cant;
+    
+	public Tablero(JPanel panel2) {
+		this.panel=panel2;
+	    insertarPuntos();
+	    insertarVidas();	
+	    enemigosVivos= new JLabel[16];
+	 //   crearArreglo();
+	    cant=16;
+	}
+	
+	//-----------------------------------------------------------------
+
+	private void crearArreglo(){
+	
+		for (int i = 0 ; i < enemigosVivos.length; i++){
+			JLabel label= new JLabel();
+			ImageIcon graf= new ImageIcon(getClass().getResource("/Iconos/tablero.jpg"));
+			ImageIcon aux=(ImageIcon) graf; 
+    	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+    	   label.setIcon(icono);
+    	   enemigosVivos[i]= label;
+		}
+	}
+	
+	public void eliminarEnemigo(){
+ 
+		panel.remove(enemigosVivos[cant--]);
+	}
+		
+	public void actualizarPuntos(int i){
+		puntos.setText("Puntos: "+i);
+	}
+	
+	private void insertarPuntos(){
+		puntos = new JLabel("Puntos: 0");
+		puntos.setBounds(10, 420, 104, 23);
+		panel.add(puntos);
+	}
+	
+	private void insertarVidas(){
+		vidas = new JLabel("Vidas: "+4);
+		vidas.setBounds(10, 300, 104, 23);
+		panel.add(vidas);
+	} 
+	
+	public void actualizarVidas(int x){
+		vidas.setText("Vidas: "+x);
+	}
+	
+	
+	
+	
+	
+
+}

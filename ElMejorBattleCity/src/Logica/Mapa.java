@@ -3,54 +3,73 @@ import Tanques.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Rectangle.*;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import java.util.Iterator;
+import Bala.Bala;
+import Bala.balaJugador;
+
+
+
 
 import Lista.*;
 import Obstaculos.*;
 import PowerUp.*;
 
 
-public class Mapa {
 
-	private Jugador jugador;
-	private JPanel panelMapa;
-	private JPanel panel1;
-	private Enemigo[] enemigosEnBatalla;
-	private PositionList<Obstaculo> lista;
-	private PositionList<Bala> balas;
-	private int anchoPanel1;
-	private int altoPanel1;
-	private Obstaculo obs;private int enemigosMuertos;
+public class Mapa  {
+
+	private Jugador jugador;	
+	private Obstaculo obs;
     private Power poder;
+    private Obstaculo aguila;
+	private Enemigo[] enemigosEnBatalla;
+	private PositionList<Obstaculo> listaObstaculo;
+	private PositionList<Bala> balas;
+	private int cantEnemigos;
+	private JPanel panelMapa;
+	
+
 	
 	public Mapa(JPanel panel){
 		
 		panelMapa=panel;
-		altoPanel1=panel.getHeight();
-		anchoPanel1=panel.getWidth();
 		jugador=new Jugador();
+		jugador.setVidas(4);
 		enemigosEnBatalla = new Enemigo[4];
-		lista= new ListaDE<Obstaculo>();
 		balas= new ListaDE<Bala>();
-		enemigosMuertos=0;
-		
+        listaObstaculo= new ListaDE<Obstaculo>();
+        cantEnemigos=16;	
+        
 	}
 	
-	private void leerArchivo(){
+	//-----------------------------------------------------------------
+	
+	public void restablecerJugador(){
+		if(!jugador.getInmortal()){
+			int aux = jugador.getVidas();
+			borrar(jugador.getGrafico(0));
+			jugador = new Jugador();
+			insertar(jugador.getGrafico(0),jugador.getRectangulo());
+			jugador.setVidas(aux-1);
+		}
+	}
+	
+	public void leerArchivo(int nivel){
 		
 		   try{
-					FileReader f = new FileReader(getClass().getResource("/Archivo/primerNivel.txt").getFile());
+					FileReader f = new FileReader(getClass().getResource("/Archivo/Nivel"+nivel+".txt").getFile());
 			        BufferedReader b = new BufferedReader(f);
 			        String cadena="";
 			        char d;
@@ -67,14 +86,17 @@ public class Mapa {
 			                	   obs=new Acero();
 			                	      else if(d=='c')
 			                		       obs= new Agua();
-			                		       else if(d =='A')
+			                		       else if(d =='A'){
 			                				     obs= new Aguila();
+			                				     aguila = obs;
+			                		       		 }
 			                			        else if(d=='e')
 			                					     obs= new Cesped();
 			                   
 			             if (obs!=null){
-			            	 lista.addLast(obs); 
-			            	 obs.set(panelMapa, x, y);   
+			            	 listaObstaculo.addLast(obs); 
+			            	 obs.set(x, y);  
+			            	 insertar(obs.getGrafico(0),obs.getRectangulo());
 			             }
 			             obs=null;
 			             x+=25; 
@@ -83,20 +105,136 @@ public class Mapa {
 			        }
 			        
 			 b.close();
-			 
-		 }catch (IOException e) {
+		 }
+		   catch (IOException e) {
 			 System.out.println("Error en obstaculo - leerArchivo. ");
-		 }	 
-		   
-	    }
-	
-	public void iniciarCarga(){ 
-		jugador.insertar(panelMapa,jugador.getGrafico(0),jugador.getRectangulo());
-        leerArchivo();
+		   }	 
 	}
 	
-	public void cargarEnemigo(Enemigo enemigo){
-		enemigo.insertar(panelMapa, enemigo.getGrafico(1),enemigo.getRectangulo());
+     public void liberarPanel(){
+    	 
+    	 
+    	 if(poder!=null){
+    			borrar(poder.getGrafico(0));
+    			poder=null;
+    		}
+   		
+   		for(Position<Obstaculo> p : listaObstaculo.positions()){
+   			try {					
+   				listaObstaculo.remove(p);	
+   				borrar(p.element().getGrafico(0));						
+   			} catch (InvalidPositionException e) {}
+   		}
+   		listaObstaculo= new ListaDE<Obstaculo>();
+   		
+   		for(Position<Bala> B : balas.positions()){
+   			try {					
+   				balas.remove(B);	
+   				borrar(B.element().getGrafico(0));						
+   			} catch (InvalidPositionException e) {}
+   		}
+   		
+   		
+   		for(int i=0 ; i<4 ; i++){
+   			if(enemigosEnBatalla[i]!=null){
+   				borrar(enemigosEnBatalla[i].getGrafico(0));
+   			enemigosEnBatalla[i]=null;
+   			}
+   		}
+   		borrar(jugador.getGrafico(0));		
+   	}
+	
+    public void setPowerUp(Power p){
+ 		poder = p;
+ 	}
+ 	
+ 	public void insertarPower(){
+ 			
+ 			int posx= (int)((300+1)*(Math.random()));
+ 			int posy= (int)((460+1)*(Math.random()));
+ 			
+ 			Point pos= new Point(posx,posy);
+ 			
+ 			int power= (int)((5+1)*(Math.random())); 
+ 			crearPower(power);
+ 			poder.set(pos);
+ 			insertar(poder.getGrafico(0), poder.getRectangulo());
+ 			
+ 			Position<Obstaculo> r = verificarColision(poder.getRectangulo());
+ 			 
+ 			if (r != null)
+ 				 poder.getGrafico(0).setComponentZOrder(r.element().getGrafico(0),0);
+ 			
+ 			tiempoPower();
+ 			
+ 	}
+ 		
+ 	public void reset(){
+		cantEnemigos=16;
+		liberarPanel();
+		jugador=new Jugador();
+		
+	}
+ 	
+ 	private void crearPower(int i){
+ 		  
+ 			if (i==0)
+ 				poder= new Casco();
+ 			else if (i==1)
+ 				   poder= new Estrella();
+ 			else if (i==2)
+ 				   poder= new Granada();
+ 			else if (i==3)
+ 				   poder = new Pala();
+ 			else if (i==4)
+ 				   poder= new Reloj();
+ 			else if (i==5)
+ 				   poder= new tanque();
+ 			
+ 	}
+ 		
+ 	private void tiempoPower(){
+ 		
+ 			 Timer timer = new Timer (30000, new ActionListener ()
+ 	        {
+ 	            public void actionPerformed(ActionEvent e)
+ 	            {	
+ 	            	if(poder!=null){
+ 	            		borrar(poder.getGrafico(0));
+ 	            		poder= null;
+ 	            	}
+ 	            }
+ 	        });
+ 	        timer.start();
+             timer.setRepeats(false);
+ 	}
+ 	
+	public void iniciarCarga(int nivel){ 
+		leerArchivo(nivel);
+		insertar(jugador.getGrafico(0),jugador.getRectangulo());
+		insertarEnemigo();
+	}
+	
+	public void insertar(JLabel l,Rectangle r){		
+		
+		   panelMapa.add(l);
+		   panelMapa.scrollRectToVisible(r);	   
+	}
+	   
+	public void borrar(JLabel l){
+		   panelMapa.remove(l);
+		   panelMapa.revalidate();
+		   panelMapa.repaint();
+	}
+	
+	public void insertarEnemigo(){
+   	 Enemigo enemigo = getEnemigo();
+   	 cargarEnemigo(enemigo);
+   	 
+    }
+	
+	private void cargarEnemigo(Enemigo enemigo){
+		insertar(enemigo.getGrafico(1),enemigo.getRectangulo());
 		boolean inserte=false;
 		for(int i=0; i<enemigosEnBatalla.length && !inserte; i++){
 			if(enemigosEnBatalla[i]==null){
@@ -104,22 +242,59 @@ public class Mapa {
 				enemigosEnBatalla[i]=enemigo;
 			}
 		}
-		
 	}
 	
-
+	 public void insertarBalaJugador(Jugador t){
+    	 int dir =t.getUltimaDireccion();
+    	 Bala b = new balaJugador(t.posicion.x,t.posicion.y,dir,t.getVelocidadDisparo(),t.getNroSerie());
+    	 cargarDisparo(b);
+     }
+	 
+	 public void cargarDisparo(Bala bala){
+			
+		    insertar(bala.getGrafico(0), bala.getRectangulo());
+			balas.addLast(bala);		
+	}
+	 
+	//-----------------------------------------------------------------
+    
+	private Enemigo getEnemigo(){
+		Enemigo enemigo=null;
+		if(cantEnemigos%4==0)
+			enemigo=new TanqueBasico();
+		if(cantEnemigos%4==1)
+			enemigo=new TanqueBlindado();
+		if(cantEnemigos%4==2)
+			enemigo=new TanqueRapido();
+		if(cantEnemigos%4==3)
+			enemigo=new TanqueDePoder();
+		
+		cantEnemigos--;
+		
+		return enemigo;
+	}
 	
 	public Jugador getJugador(){
 		return jugador;
 	}
 	
+	public Obstaculo getAguila(){
+		return aguila;
+	}
 	
-	public Enemigo[] getEnemigo(){
+	public Enemigo[] getArregloEnemigo(){
 		return  enemigosEnBatalla;
 	}
 	
-	public PositionList<Bala> getBalas(){
-		return balas;
+	public JLabel agregarEnIcon(String a){
+		ImageIcon graf = new ImageIcon(getClass().getResource("/Iconos/"+a+".jpg"));
+		JLabel label= new JLabel();
+		label.setBounds(30,80,250,100);
+        ImageIcon aux=(ImageIcon) graf; 
+	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+	    label.setIcon(icono);
+	    panelMapa.add(label);
+	    return label;
 	}
 	
 	public int cantEnemigosEnMapa(){
@@ -131,138 +306,36 @@ public class Mapa {
 		return cant;
 	}
 	
-	
-	public void cargarDisparo(Bala bala){
-		bala.insertar(panelMapa, bala.getGrafico(0), bala.getRectangulo());
-		balas.addLast(bala);		
-		
+	public PositionList<Bala> getBalas(){
+		return balas;
 	}
 	
-	public void moverTanque(int dir,Tanque t){
-		if(!hayColision(t,dir))
-			t.mover(dir);
-		t.actualizarGrafico(dir);
-		t.setUltimaDireccion(dir);
+	public boolean disponibles(){
+		return cantEnemigos>0;
 	}
 	
-	
-	
-	
-	public void moverDisparo(Position<Bala> posBala){
-		if(!hayColision(posBala.element(),posBala.element().getDireccion()))			
-			posBala.element().mover(posBala.element().getDireccion());
-		else{
-				try {
-					balas.remove(posBala);
-					posBala.element().borrar(panelMapa, posBala.element().getGrafico(0));
-				} catch (InvalidPositionException e){}
-			}		
-		
+	public PositionList<Obstaculo> getObstaculo(){
+		  return listaObstaculo;
+   }
+   
+	public Power getPowerUp(){
+		return poder;
 	}
 	
+	public Position<Obstaculo> verificarColision(Rectangle r){
+		 
+		 for(Position<Obstaculo> p : listaObstaculo.positions())
+				if(r.intersects(p.element().getRectangulo()))
+					return p;
+		return null;
 		
-	
-	private Rectangle simuladorRectangulo(int dir,Componente t){
-		Rectangle aux = new Rectangle(t.getRectangulo().x,t.getRectangulo().y,t.getRectangulo().width,t.getRectangulo().height);
-		if(dir==0){
-			aux.setLocation(t.getRectangulo().x, t.getRectangulo().y-t.getVelocidad());
-			}
-			else if(dir==1){
-				aux.setLocation(t.getRectangulo().x, t.getRectangulo().y+t.getVelocidad());
-					}
-					else if(dir==2){
-						aux.setLocation(t.getRectangulo().x-t.getVelocidad(), t.getRectangulo().y);
-							}
-							else if(dir==3){
-								aux.setLocation(t.getRectangulo().x+t.getVelocidad(), t.getRectangulo().y);
-									}
-		return aux;
 	}
 	
 	
 	
-	//Verifico si hay colision con obstaculos que no me permitan avanzar.
-	//Si un obstaculo no me deja avanzar,entonces realizar accion determinada y retornar true.
-	
-	private boolean hayColision(GameEnMovimiento g,int dir){
-		
-		Rectangle aux = simuladorRectangulo(dir,g);
-		
-		//Recorro obstaculos
-		for(Position<Obstaculo> p : lista.positions()){
-			if(p.element().getRectangulo().intersects(aux) && !p.element().dejoPasar(g)){
-				if(p.element().meDestruye(g)){
-					try {					
-						lista.remove(p);	
-						p.element().borrar(panelMapa, p.element().getGrafico());						
-					
-					} catch (InvalidPositionException e) {}
-					}					
-				return true;
-				}
-			}
-			
-		 //Recorro enemigos
-		for(int i=0;i<enemigosEnBatalla.length; i++){
-				if(enemigosEnBatalla[i]!=null && !enemigosEnBatalla[i].equals(g))
-					if(enemigosEnBatalla[i].getRectangulo().intersects(aux) && !enemigosEnBatalla[i].dejoPasar(g)){
-						if(enemigosEnBatalla[i].meDestruye(g)){
-							jugador.setPuntos(enemigosEnBatalla[i].getPuntos()); 
-							enemigosEnBatalla[i].borrar(panelMapa,enemigosEnBatalla[i].getGrafico(0));
-							enemigosEnBatalla[i]=null;
-							
-							enemigosMuertos++;
-							 if (enemigosMuertos == 4){
-								 insertarPower();
-							     enemigosMuertos=0;
-							     
-							}
-						return true;
-					}
-				}
-			}
-			
-		if(jugador.getRectangulo().intersects(aux) && !jugador.dejoPasar(g))
-			return true;		
-		
-			
-		//powe up usar implementarlo con visitor. igual que obstaculos.
-		
-		
-		return false;
-		
-	}
 	
 	
-		private void insertarPower(){
-			int posx= (int)((500+1)*(Math.random()));
-			int posy= (int)((460+1)*(Math.random()));
-			
-			Point pos= new Point(posx,posy);
-			
-			int power= (int)((5+1)*(Math.random())); 
-			crearPower(power);
-			
-			poder.insertar(panelMapa, poder.getGrafico(pos), poder.getRectangulo());
-			
-		}
-		
-		private void crearPower(int i){
-		  
-			if (i==0)
-				poder= new Casco();
-			else if (i==1)
-				   poder= new Estrella();
-			else if (i==2)
-				   poder= new Granada();
-			else if (i==3)
-				   poder = new Pala();
-			else if (i==4)
-				   poder= new Reloj();
-			else if (i==5)
-				   poder= new tanque();
-			
-		}
-		
 	
+	
+    
 }

@@ -1,0 +1,49 @@
+package Tanques;
+import MovimientoEnemigo.*;
+import Visitor.*;
+
+import java.awt.Point;
+
+public abstract class Enemigo extends Tanque{
+	
+	
+	
+	protected Movimiento movimiento;
+
+
+	public Enemigo() {
+		super();
+		
+		V = new visitorEnemigo();
+		E = new elementoEnemigo();
+		
+		disparoSimultaneo=1;
+		
+		posicion = new Point(100,1);		
+		ultimaDireccion=1;
+		movimiento= new MovimientoA();
+	}
+	
+	
+	
+
+	
+	public int getVelocidadDisparo() {
+		
+		return velocidadDisparo;
+	}
+	
+	
+	public void generarNuevaDireccion(){
+		movimiento.establecerDireccion();
+	}
+	
+	public int getUltimaDireccion(){
+		return movimiento.obtenerDireccion();
+	}	
+	
+	
+	
+	
+
+}

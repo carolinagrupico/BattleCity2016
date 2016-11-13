@@ -4,17 +4,18 @@ package Obstaculos;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
 
 
 public class Cesped extends Obstaculo{
 	
 	 public Cesped(){
 		 super();
+		 E = new elementoCesped();
 		 graf = new ImageIcon(getClass().getResource("/Iconos/cesped.png"));
 	 }
 	 
-	 
+	//-----------------------------------------------------------------
 	
 	 public String getNombre(){
 			return "cesped";
@@ -22,16 +23,6 @@ public class Cesped extends Obstaculo{
 	 public Icon getIcon(){
 			return graf;
 		 }
-
 	
-	
-	@Override
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
-	
-	public boolean meDestruye(Visitor v){
-		return false;
-	}
 	
 }

@@ -1,0 +1,21 @@
+package Visitor;
+
+
+public class elementoBala implements Elemento {
+	
+	public elementoBala(){
+		
+	}
+	@Override
+	public boolean dejoPasar(Visitor v) {
+		return false;
+	}
+	
+
+	public boolean afectar(Visitor v){
+		return false;
+	}
+	
+	
+
+}

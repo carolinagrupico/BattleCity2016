@@ -2,12 +2,13 @@ package PowerUp;
 
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
 
 public class Estrella extends Power{
 	
 	public Estrella(){
 		super();
+		e = new elementoEstrella();
 		graf= new ImageIcon(getClass().getResource("/Iconos/estrella.jpg"));
 	}
 

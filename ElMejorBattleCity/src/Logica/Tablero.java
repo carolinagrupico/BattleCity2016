@@ -1,45 +1,48 @@
 package Logica;
 
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import Tanques.*;
 
 
 public class Tablero {
 
-	private JPanel panel2;
-	private int cantEnemigos;
-	
-	
+	private JPanel panel;
+    private JLabel puntos;
+    private JLabel vidas;
 
+    
 	public Tablero(JPanel panel2) {
-		this.panel2=panel2;
-		cantEnemigos=16;
+		this.panel=panel2;
+	    insertarPuntos();
+	    insertarVidas();	
 	}
 	
-	public void insertarTab() {
+	//-----------------------------------------------------------------
 		
+	public void actualizarPuntos(int i){
+		puntos.setText("Puntos: "+i);
 	}
 	
-	public Enemigo getEnemigo(){
-		Enemigo enemigo=null;
-		if(cantEnemigos%4==0)
-			enemigo=new TanqueBasico();
-		if(cantEnemigos%4==1)
-			enemigo=new TanqueBlindado();
-		if(cantEnemigos%4==2)
-			enemigo=new TanqueRapido();
-		if(cantEnemigos%4==3)
-			enemigo=new TanqueDePoder();
-		
-		cantEnemigos--;
-		
-		return enemigo;
-		
+	private void insertarPuntos(){
+		puntos = new JLabel("Puntos: 0");
+		puntos.setBounds(10, 420, 104, 23);
+		panel.add(puntos);
 	}
 	
-	public boolean disponibles(){
-		return cantEnemigos>0;
+	private void insertarVidas(){
+		vidas = new JLabel("Vidas: "+4);
+		vidas.setBounds(10, 300, 104, 23);
+		panel.add(vidas);
+	} 
+	
+	public void actualizarVidas(int x){
+		vidas.setText("Vidas: "+x);
 	}
+	
+	
+	
+	
 	
 
 }

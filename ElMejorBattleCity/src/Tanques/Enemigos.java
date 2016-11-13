@@ -15,13 +15,14 @@ public abstract class Enemigos extends Tanque{
 		posicion = new Point(100,1);
 		avanzar=true;
 		ultimaDireccion=1;
-		
 	}
 	
-	
+	//-----------------------------------------------------------------
+
 	public abstract int getGolpes();
 	public abstract int getVelocidadDisparo();
 	
+	//-----------------------------------------------------------------
 	
 	public boolean puedePasar(Tanque e) {
 		return true;

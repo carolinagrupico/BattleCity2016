@@ -2,12 +2,14 @@ package PowerUp;
 
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
+
 
 public class Pala extends Power {
 
 	public Pala(){
 		super();
+		e = new elementoPala();
 		graf= new ImageIcon(getClass().getResource("/Iconos/pala.jpg"));
 	}
 	

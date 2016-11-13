@@ -1,0 +1,34 @@
+package Bala;
+
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Point;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import Obstaculos.Acero;
+import Obstaculos.Agua;
+import Obstaculos.Aguila;
+import Obstaculos.Cesped;
+import Obstaculos.Ladrillo;
+import Tanques.Enemigo;
+import Tanques.Jugador;
+import Visitor.*;
+
+public class balaEnemigo extends Bala {	
+	
+	
+	
+	public balaEnemigo(int x,int y,int d,int v,int n){
+		
+		super(x,y,d,v,n);
+		
+		V = new visitorBalaEnemigo();
+		
+		
+	}
+	
+	
+	
+
+}

@@ -4,24 +4,31 @@ import java.awt.Point;
 
 import javax.swing.*;
 
-import Logica.Mapa;
-import Obstaculos.Acero;
-import Obstaculos.Agua;
-import Obstaculos.Aguila;
-import Obstaculos.Cesped;
-import Obstaculos.Ladrillo;
-import Visitor.Visitor;
+
+import State.Estado;
+import State.Nivel2;
+import State.Nivel3;
+import State.Nivel4;
+import Visitor.*;
 
 
 public class Jugador extends Tanque{
-	
-	
+		
+	private boolean inmortal;
+	private Estado miEstado;	
+	private int nivel;
    
 	public Jugador(){
 	  	super();
+	  	nivel=1;
+	  	inmortal=false;
+	  	V = new visitorJugador();
+	  	E = new elementoJugador();
 	  	posicion = new Point(103,432);
 	  	puntos=0;
-	  	velocidadM=2;
+	  	velocidadM=4;
+	  	velocidadDisparo=2;
+	  	disparoSimultaneo=1;
 	  	ultimaDireccion=0;
 	  	
 	  	imagen[0] = new ImageIcon(getClass().getResource("/Iconos/jugadorArriba.png"));
@@ -31,38 +38,60 @@ public class Jugador extends Tanque{
 	    
 	}
 	
-	public void setVelocidad(int v){
-		velocidadM=v;
-	}
 	
+	//--------------------------------------------------------------------------------------
 
 	
 	public void setPuntos(int x){
 		puntos=puntos+x;
 	}
 	
+	public void setInmortal(boolean b){
+		inmortal = b;
+	}
+	
+	public void setEstado(Estado state){
+		miEstado=state;
+		miEstado.ejecutarAccion(this);
+	}
+	
+	public void cambiarNivel(){
+		
+     	 if(nivel == 1){
+     		 miEstado = new Nivel2();
+     	 } 
+     	 else if(nivel == 2){
+     		miEstado = new Nivel3();	      		 	
+     	      }  
+     		 else if(nivel == 3){
+     			miEstado = new Nivel4();     		
+     		 		}
+		nivel++;
+		
+		miEstado.ejecutarAccion(this);
+	}
 
+	
+	//-------------------------------------------------------------------------
+	
+	
+	public boolean getInmortal(){
+		return inmortal;
+	}
+	
 	public int getUltimaDireccion(){
 		return ultimaDireccion;
 	}
-
-	@Override
-	public void setUltimaDireccion(int d) {
-		ultimaDireccion=d;
-		
+	
+	public int getNivel(){
+		return nivel;
 	}
 	
-	public boolean puedePasar(Enemigo e) {
-		return false;
-	}
 	
-	public boolean puedePasar(Jugador j){
-		return true;
-	}
 	
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
+	
+	
+	
 	
 	
 }

@@ -1,0 +1,57 @@
+package Logica;
+
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import javax.swing.JPanel;
+
+import Lista.*;
+import Obstaculos.Obstaculo;
+import Visitor.Elemento;
+
+
+
+public abstract class Componente {
+   protected JLabel label;
+   protected Rectangle rec;
+   protected Point posicion;
+   protected Icon [] imagen;
+   protected  int ancho;
+   protected int altura;
+   
+   public Componente(){}
+   
+   //-----------------------------------------------------------------
+
+   public JLabel getGrafico(int i){
+		if (label == null){
+			label= new JLabel();
+			rec = new Rectangle(posicion.x,posicion.y,ancho,altura);
+			label.setBounds(rec);
+           ImageIcon aux=(ImageIcon) imagen[i]; 
+    	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+    	   label.setIcon(icono);
+       }
+	  return label;
+	}
+  
+   public Rectangle getRectangulo(){
+		return rec;
+   }   
+   
+   public Point getPosicion(){
+		  return posicion;
+   }
+   
+   //-----------------------------------------------------------------
+   
+   public abstract Elemento getElemento();
+   
+   
+   
+}

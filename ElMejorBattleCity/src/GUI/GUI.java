@@ -1,13 +1,7 @@
 package GUI;
 
-import javax.swing.Timer;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.TextArea;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -15,12 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
 import Logica.Logica;
-
-import Logica.Tablero;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
 
 
 public class GUI extends JFrame {
@@ -30,20 +19,15 @@ public class GUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
- 
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private int anchoPantalla= screenSize.width;
-    private int altoPantalla= screenSize.width;
-    private int altoPanel1=altoPantalla/3+50;
-    private int anchoPanel1=anchoPantalla/4+anchoPantalla/8+50;
-    private Logica logica;
-	private Tablero tablero;
-	private int nivelTanque;
-	
-    /**
+	private int anchoPantalla;
+	private int altoPantalla;
+	private Logica logica;
+	JPanel panel1, panelTablero;
+
+	/**
 	 * Launch the application.
 	 */
-    
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -57,105 +41,68 @@ public class GUI extends JFrame {
 		});
 	}
 
+	int direccion;
+
 	/**
 	 * Create the frame.
 	 */
 	public GUI() {
+
+		anchoPantalla = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+		altoPantalla = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 690, 538);
+		this.setBounds((anchoPantalla / 3) - (getWidth() / 2), (altoPantalla / 6) - (getHeight() / 2), 500, 500);
+
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.BLACK);
+		contentPane.setForeground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		
-		JPanel panel1 = new JPanel();
+
+		panel1 = new JPanel();
 		panel1.setBackground(Color.BLACK);
 		contentPane.add(panel1);
 		panel1.setForeground(Color.GREEN);
-		panel1.setBounds(0, 0,530, 488);
+		panel1.setBounds(0, 0, 400, 490);
 		panel1.setLayout(null);
-    	
-		
-		
-		 
-		JPanel panelTablero = new JPanel();
-		panelTablero.setBounds(540, 0, 124, 488);
+
+		panelTablero = new JPanel();
+		panelTablero.setBackground(Color.LIGHT_GRAY);
+		panelTablero.setBounds(400, 0, 100, 490);
 		contentPane.add(panelTablero);
 		panelTablero.setLayout(null);
-		
-		JLabel lblP = new JLabel("Puntos: 0");
-		lblP.setBounds(10, 443, 104, 23);
-		panelTablero.add(lblP);
-				
-		
-		
-		//keyReleased
-		//keyPressed
-		logica=new Logica(panel1,panel1);
-		logica.iniciarJuego();
-	
+
+		logica = new Logica(panel1, panelTablero, contentPane);
+		logica.iniciarJuego(1);
+
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent arg0) {
-				
-				int direccion=4; 
-				 if(arg0.getKeyCode()==KeyEvent.VK_UP) 
-			 		direccion=0; 
-				 	else if(arg0.getKeyCode()==KeyEvent.VK_DOWN)
-				 			direccion=1;
-				 		else if(arg0.getKeyCode()==KeyEvent.VK_LEFT)
-				 			direccion=2;
-				 			else if(arg0.getKeyCode()==KeyEvent.VK_RIGHT)
-				 					direccion=3;
-				if (direccion!=4)
-						logica.getMapa().moverTanque(direccion, logica.getMapa().getJugador());
-				
-			}
-		});
-		
-		
-		
-		addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (e.VK_B==e.getKeyCode()){
-					logica.insertarBalaEnMapa(logica.getMapa().getJugador());
-				}
-			}
-		});
-		
-		
-		nivelTanque = 1;
-		addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (e.VK_N==e.getKeyCode()){
-					nivelTanque++;
-					logica.cambiarNivel(nivelTanque);
-					if(nivelTanque==4)
-						nivelTanque=0;
-					
-				}
-			}
-		});
-		
-			
-		actualizarPuntos(lblP);
-		
-	}
-	
-	private void actualizarPuntos(JLabel lblP){
-		 Timer timer = new Timer (500, new ActionListener ()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-            	lblP.setText("Puntos: "+logica.getMapa().getJugador().getPuntos());
-            }
-        });
-        timer.start();
 
+				direccion = 4;
+				if (arg0.getKeyCode() == KeyEvent.VK_UP)
+					direccion = 0;
+				else if (arg0.getKeyCode() == KeyEvent.VK_DOWN)
+					direccion = 1;
+				else if (arg0.getKeyCode() == KeyEvent.VK_LEFT)
+					direccion = 2;
+				else if (arg0.getKeyCode() == KeyEvent.VK_RIGHT)
+					direccion = 3;
+
+				if (direccion != 4) {
+                   logica.moverTanque2(direccion);
+				}
+			}
+		});
+
+		addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.VK_B == e.getKeyCode() && logica.puedeDisparar(logica.getMapa().getJugador())) {
+					logica.getMapa().insertarBalaJugador(logica.getMapa().getJugador());
+					logica.sonido("disparoJugador");
+				}
+			}
+		});
 	}
-	
-	
-	
 }
-	
-	
-

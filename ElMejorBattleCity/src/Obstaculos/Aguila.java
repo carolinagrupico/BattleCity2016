@@ -3,17 +3,18 @@ package Obstaculos;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
 
 
 public class Aguila extends Obstaculo{
 	
 	 public Aguila(){
 		 super();
+		 E = new elementoAguila();
 		 graf = new ImageIcon(getClass().getResource("/Iconos/aguila.png"));
 	 }
 	 
-	 
+	//----------------------------------------------------------------- 
 	 
 	 public String getNombre(){
 			return "aguila";
@@ -21,17 +22,6 @@ public class Aguila extends Obstaculo{
 	 public Icon getIcon(){
 			return graf;
 		 }
-
-	
-	
-	@Override
-	public boolean dejoPasar(Visitor v) {
-		return v.puedePasar(this);
-	}
-	
-	public boolean meDestruye(Visitor v){
-		return v.destruyo();
-	}
 	
 	
 }

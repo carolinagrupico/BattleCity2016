@@ -1,63 +1,62 @@
 package Visitor;
 
-import Obstaculos.Acero;
-import Obstaculos.Agua;
-import Obstaculos.Aguila;
-import Obstaculos.Cesped;
-import Obstaculos.Ladrillo;
-import Tanques.Enemigo;
-import Tanques.Jugador;
-import Tanques.Tanque;
+
 
 public class visitorBala implements Visitor{
 
 	@Override
-	public boolean puedePasar(Ladrillo e) {
+	public boolean puedePasar(elementoLadrillo e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean puedePasar(Acero e) {
+	public boolean puedePasar(elementoAcero e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean puedePasar(Agua e) {
+	public boolean puedePasar(elementoAgua e) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean puedePasar(elementoCesped e) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean puedePasar(elementoAguila e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean puedePasar(Cesped e) {
+	public boolean puedePasar(elementoEnemigo e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean puedePasar(Aguila e) {
+	public boolean puedePasar(elementoJugador j) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
+	public boolean meAfecta(elementoPower e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	public boolean destruyo() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
-	public boolean puedePasar(Enemigo e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean puedePasar(Jugador j) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 }

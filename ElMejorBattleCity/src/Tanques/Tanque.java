@@ -1,112 +1,88 @@
 package Tanques;
 
-import java.awt.Image;
 import Visitor.*;
-import java.awt.Point;
-import java.awt.Rectangle;
+
+import java.util.Random;
 
 import javax.swing.Icon;
-import javax.swing.JLabel;
 
-import Lista.Position;
-import Logica.Componente;
-import Logica.Mapa;
-import Obstaculos.Acero;
-import Obstaculos.Agua;
-import Obstaculos.Aguila;
-import Obstaculos.Cesped;
-import Obstaculos.Ladrillo;
-import Obstaculos.Obstaculo;
-import State.Estado;
 
-import javax.swing.ImageIcon;
 
 
 public abstract class Tanque extends GameEnMovimiento{
 	
 	protected int puntos;
 	
-	protected Estado miEstado;
 	protected int ultimaDireccion;
-	
+	protected int velocidadDisparo;
+	protected int velocidadM;
+	protected Visitor V;
+	protected Elemento E;
+	protected int vidas;
+	protected int disparoSimultaneo;
+
 	
 	public Tanque(){		
 		imagen= new Icon[4];
 		ancho=20;
 		altura=20;
+		
+		Random rand = new Random(); 		 
+   	 	NroSerie = rand.nextInt(100);
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public void setUltimaDireccion(int d) {
+		ultimaDireccion=d;
+		
+	}
+	
+	public void setVelocidad(int v){
+		velocidadM=v;
+	}
+	
+	
+	public void setVidas(int x){
+		vidas=x;
+	}
+	
+	//--------------------------------------------------------
+	
+	
+	public abstract int getUltimaDireccion();
+	
+	
+	public int getVelocidad(){
+		return velocidadM;
+	}
+	
+	public int getVidas(){
+		return vidas;
+	}
+	
+	public Visitor getVisitor(){
+		return V;
+	}
+	
+	public Elemento getElemento(){
+		return E;
 	}
 	
 	public int getPuntos(){
 		return puntos;
-	}
+	}	
 	
-	public void setEstado(Estado state){
-		miEstado=state;
-	}
-	
-	public void cambiarNivel(){
-		miEstado.ejecutarAccion(this);
-	}
-	
-	
-	public abstract void setVelocidad(int i);
-	public abstract int getUltimaDireccion();
-	public abstract void setUltimaDireccion(int d);
-	
-	
-	//Actualiza el icono y lo setea en la nueva posicion que fue actualizada
-	
-	
-	public JLabel getGrafico(int i){
-		if (label == null){
-			label= new JLabel();
-			label.setBounds(posicion.x, posicion.y, ancho, altura);
-			rec = new Rectangle(posicion.x,posicion.y,ancho,altura);
-            ImageIcon aux=(ImageIcon) imagen[i]; //es un icono
-     	    Icon icono = new ImageIcon(aux.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
-     	   label.setIcon(icono);
-        }
-	  return label;
+	public int getVelocidadDisparo(){
+		return velocidadDisparo;
 	}
 	
 	
 	
-	
-	
-
-	@Override
-	public boolean puedePasar(Ladrillo e) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean puedePasar(Acero e) {
-		return false;
-	}
-
-	@Override
-	public boolean puedePasar(Agua e) {
-		return false;
-	}
-
-	@Override
-	public boolean puedePasar(Cesped e) {
-		return true;
-	}
-
-	@Override
-	public boolean puedePasar(Aguila e) {
-		return false;
-	}
-
-	
-	public boolean destruyo() {
-		return false;
+	public int getDisparosSimultaneos(){
+		return disparoSimultaneo;
 	}
 	
-	public boolean meDestruye(Visitor v){
-		return v.destruyo();
-	}
 	
 }

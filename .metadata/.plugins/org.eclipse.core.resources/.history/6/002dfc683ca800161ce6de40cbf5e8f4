@@ -1,0 +1,341 @@
+package Logica;
+import Tanques.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Rectangle.*;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import Bala.Bala;
+import Bala.balaJugador;
+
+import java.util.Iterator;
+
+
+import Lista.*;
+import Obstaculos.*;
+import PowerUp.*;
+import State.Estado;
+import State.Nivel1;
+import State.Nivel2;
+import State.Nivel3;
+import State.Nivel4;
+
+
+public class Mapa {
+
+	//private static final ActionListener ActionListener = null;
+	private Jugador jugador;	
+	private Obstaculo obs;
+    private Power poder;
+    private Obstaculo aguila;
+	private Enemigo[] enemigosEnBatalla;
+	private PositionList<Obstaculo> listaObstaculo;
+	private PositionList<Bala> balas;
+	private int anchoPanel1;
+	private int altoPanel1;
+	private int cantEnemigos;
+	private JPanel panelMapa;
+
+	
+	public Mapa(JPanel panel){
+		
+		panelMapa=panel;
+		altoPanel1=panel.getHeight();
+		anchoPanel1=panel.getWidth();
+		jugador=new Jugador();
+		jugador.setVidas(4);
+		enemigosEnBatalla = new Enemigo[4];
+		balas= new ListaDE<Bala>();
+        listaObstaculo= new ListaDE<Obstaculo>();
+        cantEnemigos=16;	
+        
+	}
+	
+	public void restablecerJugador(){
+		if(!jugador.getInmortal()){
+			int aux = jugador.getVidas();
+			borrar(jugador.getGrafico(0));
+			jugador = new Jugador();
+			insertar(jugador.getGrafico(0),jugador.getRectangulo());
+			jugador.setVidas(aux-1);
+		}
+	}
+	
+	public void leerArchivo(int nivel){
+		
+		   try{
+					FileReader f = new FileReader(getClass().getResource("/Archivo/Nivel"+nivel+".txt").getFile());
+			        BufferedReader b = new BufferedReader(f);
+			        String cadena="";
+			        char d;
+			        int y=1;
+			        
+			        while((cadena = b.readLine())!=null) {
+			        	int x=1;
+			        	for (int i = 0; i < cadena.length(); i++){
+			      		   d = cadena.charAt(i);
+			      		   
+			                if (d == 'l')
+			                  obs= new Ladrillo();
+			                	else if(d=='a')
+			                	   obs=new Acero();
+			                	      else if(d=='c')
+			                		       obs= new Agua();
+			                		       else if(d =='A'){
+			                				     obs= new Aguila();
+			                				     aguila = obs;
+			                		       		 }
+			                			        else if(d=='e')
+			                					     obs= new Cesped();
+			                   
+			             if (obs!=null){
+			            	 listaObstaculo.addLast(obs); 
+			            	 obs.set(x, y);  
+			            	 insertar(obs.getGrafico(0),obs.getRectangulo());
+			             }
+			             obs=null;
+			             x+=25; 
+			          }
+			          y+=25;
+			        }
+			        
+			 b.close();
+		 }
+		   catch (IOException e) {
+			 System.out.println("Error en obstaculo - leerArchivo. ");
+		   }	 
+	}
+	
+     public void liberarPanel(){
+    	 
+    	 
+    	 if(poder!=null){
+    			borrar(poder.getGrafico(0));
+    			poder=null;
+    		}
+   		
+   		for(Position<Obstaculo> p : listaObstaculo.positions()){
+   			try {					
+   				listaObstaculo.remove(p);	
+   				borrar(p.element().getGrafico(0));						
+   			} catch (InvalidPositionException e) {}
+   		}
+   		listaObstaculo= new ListaDE<Obstaculo>();
+   		
+   		for(Position<Bala> B : balas.positions()){
+   			try {					
+   				balas.remove(B);	
+   				borrar(B.element().getGrafico(0));						
+   			} catch (InvalidPositionException e) {}
+   		}
+   		
+   		
+   		for(int i=0 ; i<4 ; i++){
+   			if(enemigosEnBatalla[i]!=null){
+   				borrar(enemigosEnBatalla[i].getGrafico(0));
+   			enemigosEnBatalla[i]=null;
+   			}
+   		}
+   		
+   		borrar(jugador.getGrafico(0));
+   		
+   		
+   			
+   	}
+	
+	public void iniciarCarga(int nivel){ 
+		leerArchivo(nivel);
+		insertar(jugador.getGrafico(0),jugador.getRectangulo());
+		insertarEnemigo();
+	}
+	
+	public void insertar(JLabel l,Rectangle r){		
+		
+		   panelMapa.add(l);
+		   panelMapa.scrollRectToVisible(r);	   
+		   
+		   
+	}
+	   
+	public void borrar(JLabel l){
+		   panelMapa.remove(l);
+		   panelMapa.revalidate();
+		   panelMapa.repaint();
+	}
+	
+	public void insertarEnemigo(){
+   	 Enemigo enemigo = getEnemigo();
+   	 cargarEnemigo(enemigo);
+   	 
+    }
+	
+	
+    
+	private Enemigo getEnemigo(){
+		Enemigo enemigo=null;
+		if(cantEnemigos%4==0)
+			enemigo=new TanqueBasico();
+		if(cantEnemigos%4==1)
+			enemigo=new TanqueBlindado();
+		if(cantEnemigos%4==2)
+			enemigo=new TanqueRapido();
+		if(cantEnemigos%4==3)
+			enemigo=new TanqueDePoder();
+		
+		cantEnemigos--;
+		
+		return enemigo;
+		
+	}
+	
+	private void cargarEnemigo(Enemigo enemigo){
+		insertar(enemigo.getGrafico(1),enemigo.getRectangulo());
+		boolean inserte=false;
+		for(int i=0; i<enemigosEnBatalla.length && !inserte; i++){
+			if(enemigosEnBatalla[i]==null){
+				inserte=true;
+				enemigosEnBatalla[i]=enemigo;
+			}
+		}
+	}
+	
+	
+	public Jugador getJugador(){
+		return jugador;
+	}
+	
+	public Obstaculo getAguila(){
+		return aguila;
+	}
+	
+	public Enemigo[] getArregloEnemigo(){
+		return  enemigosEnBatalla;
+	}
+	
+	public int cantEnemigosEnMapa(){
+		int cant=0;
+		for(int i=0; i<enemigosEnBatalla.length; i++){
+			if(enemigosEnBatalla[i]!=null)
+				cant++;
+		}
+		return cant;
+	}
+	
+	 public void insertarBalaJugador(Jugador t){
+    	 int dir =t.getUltimaDireccion();
+    	 Bala b = new balaJugador(t.posicion.x,t.posicion.y,dir,t.getVelocidadDisparo(),t.getNroSerie());
+    	 cargarDisparo(b);
+     }
+	
+	public PositionList<Bala> getBalas(){
+		return balas;
+	}
+	
+	
+	
+	public void cargarDisparo(Bala bala){
+		
+	    insertar(bala.getGrafico(0), bala.getRectangulo());
+		balas.addLast(bala);		
+		
+	}
+	
+	public boolean disponibles(){
+		return cantEnemigos>0;
+	}
+	
+	
+	
+	public PositionList<Obstaculo> getObstaculo(){
+		  return listaObstaculo;
+	  }
+   
+	public Power getPowerUp(){
+		return poder;
+	}
+	
+	public void setPowerUp(Power p){
+		poder = p;
+	}
+	
+	public void insertarPower(){
+			
+			int posx= (int)((300+1)*(Math.random()));
+			int posy= (int)((460+1)*(Math.random()));
+			
+			Point pos= new Point(posx,posy);
+			
+			int power= (int)((5+1)*(Math.random())); 
+			crearPower(power);
+			poder.set(pos);
+			insertar(poder.getGrafico(0), poder.getRectangulo());
+			
+			Position<Obstaculo> r = verificarColision(poder.getRectangulo());
+			 
+			if (r != null)
+				 poder.getGrafico(0).setComponentZOrder(r.element().getGrafico(0),0);
+			
+			tiempoPower();
+			
+		}
+		
+	private void crearPower(int i){
+		  
+			if (i==0)
+				poder= new Casco();
+			else if (i==1)
+				   poder= new Estrella();
+			else if (i==2)
+				   poder= new Granada();
+			else if (i==3)
+				   poder = new Pala();
+			else if (i==4)
+				   poder= new Reloj();
+			else if (i==5)
+				   poder= new tanque();
+			
+	}
+		
+	private void tiempoPower(){
+		
+			 Timer timer = new Timer (30000, new ActionListener ()
+	        {
+	            public void actionPerformed(ActionEvent e)
+	            {	
+	            	if(poder!=null){
+	            		borrar(poder.getGrafico(0));
+	            		poder= null;
+	            	}
+	            }
+	        });
+	        timer.start();
+            timer.setRepeats(false);
+	}
+		
+	public Position<Obstaculo> verificarColision(Rectangle r){
+		 
+		 for(Position<Obstaculo> p : listaObstaculo.positions())
+				if(r.intersects(p.element().getRectangulo()))
+					return p;
+		return null;
+		
+	}
+	
+	public void reset(){
+		cantEnemigos=16;
+		liberarPanel();
+		jugador=new Jugador();
+		
+	}
+
+}

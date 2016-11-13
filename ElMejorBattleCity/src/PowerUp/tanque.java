@@ -2,14 +2,15 @@ package PowerUp;
 
 import javax.swing.ImageIcon;
 
-import Visitor.Visitor;
+import Visitor.*;
 
 public class tanque extends Power{
 
 	public tanque(){
 		super();
+		e = new elementoTanqueP();
 		graf= new ImageIcon(getClass().getResource("/Iconos/tanque.jpg"));
 	}
-	
+
 	
 }
